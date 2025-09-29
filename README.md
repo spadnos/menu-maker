@@ -28,45 +28,51 @@ An elegant, interactive menu application for bistros with customer-facing displa
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd menu-maker
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
-   
+
    Copy the example environment file:
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Then edit `.env.local` and add your Supabase credentials:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
    ```
-   
+
    Get these values from your [Supabase Dashboard](https://supabase.com/dashboard) → Project Settings → API
 
 4. **Set up the database** (coming in next tasks)
+
    ```bash
    # Apply migrations
    npx supabase db push
-   
+
    # Seed with sample data
    npm run db:seed
    ```
 
 5. **Run the development server**
+
    ```bash
    npm run dev
    ```
-   
+
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project Structure
@@ -105,6 +111,7 @@ menu-maker/
 ## Development Workflow
 
 This project follows Test-Driven Development (TDD):
+
 1. Write tests first
 2. Run tests (they should fail)
 3. Implement features to make tests pass

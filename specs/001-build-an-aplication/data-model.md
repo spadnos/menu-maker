@@ -38,22 +38,26 @@
 Represents menu categories (Appetizers, Entrees, Desserts, etc.)
 
 **Fields**:
+
 - `id`: UUID, Primary Key, auto-generated
 - `name`: VARCHAR(100), NOT NULL, UNIQUE
 - `display_order`: INTEGER, NOT NULL, DEFAULT 0
 - `created_at`: TIMESTAMP WITH TIME ZONE, DEFAULT NOW()
 
 **Validation Rules**:
+
 - Name must be 1-100 characters
 - Name must be unique (case-insensitive)
 - Display order determines category sequence on menu
 
 **Indexes**:
+
 - Primary key on `id`
 - Unique index on `LOWER(name)`
 - Index on `display_order` for sorting
 
 **RLS Policies**:
+
 - SELECT: Public (anyone can read)
 - INSERT/UPDATE/DELETE: Admin users only
 
@@ -64,6 +68,7 @@ Represents menu categories (Appetizers, Entrees, Desserts, etc.)
 Represents individual dishes on the menu
 
 **Fields**:
+
 - `id`: UUID, Primary Key, auto-generated
 - `name`: VARCHAR(200), NOT NULL
 - `description`: TEXT, NOT NULL
@@ -73,6 +78,7 @@ Represents individual dishes on the menu
 - `updated_at`: TIMESTAMP WITH TIME ZONE, DEFAULT NOW()
 
 **Validation Rules**:
+
 - Name must be 1-200 characters
 - Description must be 1-2000 characters
 - Category must exist
@@ -80,16 +86,19 @@ Represents individual dishes on the menu
 - Updated_at automatically set on modification
 
 **Indexes**:
+
 - Primary key on `id`
 - Foreign key index on `category_id`
 - GIN index on `to_tsvector('english', name || ' ' || description)` for full-text search
 - Index on `created_at` for sorting
 
 **RLS Policies**:
+
 - SELECT: Public (anyone can read)
 - INSERT/UPDATE/DELETE: Admin users only
 
 **Relationships**:
+
 - BELONGS TO one category (category_id → categories.id)
 - HAS ONE recipe (optional, recipes.menu_item_id → id)
 
@@ -100,6 +109,7 @@ Represents individual dishes on the menu
 Contains cooking instructions for menu items
 
 **Fields**:
+
 - `id`: UUID, Primary Key, auto-generated
 - `menu_item_id`: UUID, NOT NULL, UNIQUE, FOREIGN KEY → menu_items(id) ON DELETE CASCADE
 - `ingredients`: JSONB, NOT NULL
@@ -109,6 +119,7 @@ Contains cooking instructions for menu items
 - `updated_at`: TIMESTAMP WITH TIME ZONE, DEFAULT NOW()
 
 **Validation Rules**:
+
 - Menu item must exist
 - One recipe per menu item (enforced by UNIQUE constraint)
 - Ingredients must be valid JSON array of objects: `[{name: string, amount: string}]`
@@ -116,18 +127,22 @@ Contains cooking instructions for menu items
 - Prep time must be positive integer if provided
 
 **Indexes**:
+
 - Primary key on `id`
 - Unique foreign key index on `menu_item_id`
 - GIN index on `ingredients` for ingredient search
 
 **RLS Policies**:
+
 - SELECT: Public (anyone can read)
 - INSERT/UPDATE/DELETE: Admin users only
 
 **Relationships**:
+
 - BELONGS TO one menu_item (menu_item_id → menu_items.id)
 
 **Ingredients JSONB Structure**:
+
 ```json
 [
   {
@@ -142,6 +157,7 @@ Contains cooking instructions for menu items
 ```
 
 **Instructions Array Structure**:
+
 ```sql
 ARRAY[
   'Preheat oven to 400°F',
@@ -160,12 +176,14 @@ ARRAY[
 Stores menu item images
 
 **Configuration**:
+
 - Public bucket (read access for all)
 - Max file size: 5MB
 - Allowed MIME types: image/jpeg, image/png, image/webp
 - File naming: `{menu_item_id}.{ext}`
 
 **RLS Policies**:
+
 - SELECT: Public
 - INSERT/UPDATE/DELETE: Admin users only
 
@@ -178,10 +196,12 @@ Stores menu item images
 Uses Supabase Auth `auth.users` table
 
 **Admin Identification**:
+
 - Custom claim or metadata field: `role: 'admin'`
 - Or separate `admin_users` table with user_id foreign key
 
 **RLS Policy Pattern**:
+
 ```sql
 -- Example RLS policy for admin-only operations
 CREATE POLICY "Admin users can modify menu_items"
@@ -443,11 +463,13 @@ export type MenuItemFull = MenuItem & {
 // Get all menu items grouped by category
 const { data: menuItems } = await supabase
   .from('menu_items')
-  .select(`
+  .select(
+    `
     *,
     category:categories(*),
     recipe:recipes(id)
-  `)
+  `
+  )
   .order('category.display_order', { ascending: true })
   .order('name', { ascending: true })
 ```
@@ -461,7 +483,7 @@ const { data } = await supabase
   .select('*, category:categories(*)')
   .textSearch('name', searchTerm, {
     type: 'websearch',
-    config: 'english'
+    config: 'english',
   })
 
 // Search by ingredient
@@ -491,7 +513,7 @@ const { data, error } = await supabase
     name: 'New Dish',
     description: 'Delicious description',
     category_id: categoryId,
-    image_url: imageUrl
+    image_url: imageUrl,
   })
   .select()
   .single()
@@ -545,18 +567,22 @@ const menuItemSchema = z.object({
   name: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
   category_id: z.string().uuid(),
-  image_url: z.string().url().nullable()
+  image_url: z.string().url().nullable(),
 })
 
 // Recipe validation schema
 const recipeSchema = z.object({
   menu_item_id: z.string().uuid(),
-  ingredients: z.array(z.object({
-    name: z.string().min(1),
-    amount: z.string().min(1)
-  })).min(1),
+  ingredients: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        amount: z.string().min(1),
+      })
+    )
+    .min(1),
   instructions: z.array(z.string().min(1)).min(1),
-  prep_time_mins: z.number().int().positive().nullable()
+  prep_time_mins: z.number().int().positive().nullable(),
 })
 ```
 

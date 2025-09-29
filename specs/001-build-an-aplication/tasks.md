@@ -5,12 +5,14 @@
 **Prerequisites**: plan.md, research.md, data-model.md, contracts/, quickstart.md
 
 ## Tech Stack Summary
+
 - **Framework**: Next.js 14+ (App Router), React 18, TypeScript
 - **Backend**: Supabase (PostgreSQL + Auth + Storage)
 - **UI**: shadcn/ui, Tailwind CSS
 - **Testing**: Playwright (E2E), Vitest (unit), React Testing Library
 
 ## Path Conventions
+
 ```
 app/                    # Next.js App Router pages
 components/             # React components
@@ -35,13 +37,13 @@ supabase/              # Database migrations
   - Create `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
   - Add `.env.local` to `.gitignore`
 
-- [ ] **T003** [P] Set up shadcn/ui component library
+- [x] **T003** [P] Set up shadcn/ui component library ✅
   - Run `npx shadcn-ui@latest init`
   - Configure `components.json` for Tailwind
   - Install initial components: `button`, `input`, `card`, `dialog`, `form`, `select`, `textarea`
   - Create `components/ui/` directory structure
 
-- [ ] **T004** [P] Configure testing frameworks
+- [x] **T004** [P] Configure testing frameworks ✅
   - Install Playwright: `npm install -D @playwright/test`
   - Run `npx playwright install`
   - Create `playwright.config.ts` with base URL and test directories
@@ -49,7 +51,7 @@ supabase/              # Database migrations
   - Create `vitest.config.ts`
   - Install React Testing Library: `npm install -D @testing-library/react @testing-library/jest-dom`
 
-- [ ] **T005** [P] Set up code quality tools
+- [x] **T005** [P] Set up code quality tools ✅
   - Install ESLint and Prettier: `npm install -D eslint prettier eslint-config-prettier`
   - Create `.eslintrc.json` with Next.js and TypeScript rules
   - Create `.prettierrc` with formatting rules
@@ -105,14 +107,14 @@ supabase/              # Database migrations
 
 ## Phase 3.3: Type Definitions & Validation
 
-- [ ] **T012** [P] Create Zod validation schemas
+- [x] **T012** [P] Create Zod validation schemas ✅
   - Create `lib/validations/menu-item.ts` with `menuItemSchema`
   - Create `lib/validations/recipe.ts` with `recipeSchema` and `ingredientSchema`
   - Create `lib/validations/category.ts` with `categorySchema`
   - Export all schemas from `lib/validations/index.ts`
   - Add validation error messages
 
-- [ ] **T013** [P] Create custom React hooks for data fetching
+- [x] **T013** [P] Create custom React hooks for data fetching ✅
   - Create `lib/hooks/use-menu-items.ts` for fetching menu items
   - Create `lib/hooks/use-categories.ts` for fetching categories
   - Create `lib/hooks/use-recipe.ts` for fetching recipe details
@@ -125,7 +127,7 @@ supabase/              # Database migrations
 
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation in Phase 3.5**
 
-- [ ] **T014** [P] E2E test: Browse menu by category
+- [x] **T014** [P] E2E test: Browse menu by category ✅
   - Create `tests/e2e/customer-menu.spec.ts`
   - Test: Navigate to homepage
   - Test: Verify categories displayed in order
@@ -134,7 +136,7 @@ supabase/              # Database migrations
   - Test: Verify responsive layout on mobile/tablet/desktop
   - **Expected**: Test FAILS (page not implemented)
 
-- [ ] **T015** [P] E2E test: Search by name and description
+- [x] **T015** [P] E2E test: Search by name and description ✅
   - Create `tests/e2e/search.spec.ts`
   - Test: Type "salmon" in search box
   - Test: Wait for debounce (300ms)
@@ -143,7 +145,7 @@ supabase/              # Database migrations
   - Test: Clear search shows all items
   - **Expected**: Test FAILS (search not implemented)
 
-- [ ] **T016** [P] E2E test: Search by ingredient
+- [x] **T016** [P] E2E test: Search by ingredient ✅
   - Add to `tests/e2e/search.spec.ts`
   - Test: Type "gluten-free" in search
   - Test: Verify results include items with gluten-free ingredients
@@ -151,7 +153,7 @@ supabase/              # Database migrations
   - Test: Test partial matches
   - **Expected**: Test FAILS (ingredient search not implemented)
 
-- [ ] **T017** [P] E2E test: Filter by category
+- [x] **T017** [P] E2E test: Filter by category ✅
   - Add to `tests/e2e/customer-menu.spec.ts`
   - Test: Select "Desserts" from category filter
   - Test: Verify only dessert items displayed
@@ -159,7 +161,7 @@ supabase/              # Database migrations
   - Test: Combine filter with search
   - **Expected**: Test FAILS (filter not implemented)
 
-- [ ] **T018** [P] E2E test: View recipe details
+- [x] **T018** [P] E2E test: View recipe details ✅
   - Add to `tests/e2e/customer-menu.spec.ts`
   - Test: Click recipe link on menu item
   - Test: Verify recipe page shows ingredients list
@@ -168,7 +170,7 @@ supabase/              # Database migrations
   - Test: Navigate back to menu
   - **Expected**: Test FAILS (recipe page not implemented)
 
-- [ ] **T019** [P] E2E test: Handle empty states
+- [x] **T019** [P] E2E test: Handle empty states ✅
   - Add to `tests/e2e/search.spec.ts`
   - Test: Search for non-existent item
   - Test: Verify "No items found" message displayed
@@ -176,7 +178,7 @@ supabase/              # Database migrations
   - Test: Verify no broken UI
   - **Expected**: Test FAILS (empty state not implemented)
 
-- [ ] **T020** [P] Component test: MenuItemCard
+- [x] **T020** [P] Component test: MenuItemCard ✅
   - Create `tests/unit/menu-item-card.test.tsx`
   - Test: Renders with all props
   - Test: Shows placeholder when no image
@@ -184,7 +186,7 @@ supabase/              # Database migrations
   - Test: Truncates long descriptions (if implemented)
   - **Expected**: Test FAILS (component not created)
 
-- [ ] **T021** [P] Component test: SearchBar with debounce
+- [x] **T021** [P] Component test: SearchBar with debounce ✅
   - Create `tests/unit/search-bar.test.tsx`
   - Test: Renders input field
   - Test: Debounces input by 300ms
@@ -196,14 +198,14 @@ supabase/              # Database migrations
 
 ## Phase 3.5: Customer Menu - Implementation (ONLY after tests are failing)
 
-- [ ] **T022** Create customer layout and homepage
+- [x] **T022** Create customer layout and homepage ✅
   - Create `app/(customer)/layout.tsx` with bistro-themed header
   - Create `app/(customer)/page.tsx` for menu display
   - Add global styles in `app/globals.css` for bistro aesthetic
   - Configure fonts (elegant serif for headings, sans-serif for body)
   - Add metadata for SEO
 
-- [ ] **T023** [P] Implement MenuItemCard component
+- [x] **T023** [P] Implement MenuItemCard component ✅
   - Create `components/customer/menu-item-card.tsx`
   - Display: name, description, image with Next.js Image
   - Show placeholder for missing images
@@ -211,7 +213,7 @@ supabase/              # Database migrations
   - Style with Tailwind for elegant bistro look
   - Make tests in T020 PASS
 
-- [ ] **T024** [P] Implement SearchBar component with debounce
+- [x] **T024** [P] Implement SearchBar component with debounce ✅
   - Create `components/customer/search-bar.tsx`
   - Use `use-search` hook for debounced input (300ms)
   - Add search icon from Lucide
@@ -219,14 +221,14 @@ supabase/              # Database migrations
   - Style with shadcn/ui Input component
   - Make tests in T021 PASS
 
-- [ ] **T025** [P] Implement CategoryFilter component
+- [x] **T025** [P] Implement CategoryFilter component ✅
   - Create `components/customer/category-filter.tsx`
   - Fetch categories with `use-categories` hook
   - Render as dropdown or button group
   - Support "All Categories" option
   - Style with shadcn/ui Select component
 
-- [ ] **T026** Implement menu display page with search and filter
+- [x] **T026** Implement menu display page with search and filter ✅
   - Update `app/(customer)/page.tsx`
   - Fetch menu items with `use-menu-items` hook
   - Integrate SearchBar and CategoryFilter components
@@ -235,20 +237,20 @@ supabase/              # Database migrations
   - Handle loading and error states
   - Make tests in T014, T015, T017 PASS
 
-- [ ] **T027** Implement ingredient search functionality
+- [x] **T027** Implement ingredient search functionality ✅
   - Update `lib/hooks/use-search.ts` to support ingredient search
   - Query recipes table with JSONB contains
   - Merge results with name/description search
   - Make tests in T016 PASS
 
-- [ ] **T028** Implement empty state handling
+- [x] **T028** Implement empty state handling ✅
   - Create `components/customer/empty-state.tsx`
   - Show when search/filter returns no results
   - Display helpful message and suggestions
   - Add "Clear filters" button
   - Make tests in T019 PASS
 
-- [ ] **T029** Create recipe detail page
+- [x] **T029** Create recipe detail page ✅
   - Create `app/(customer)/recipe/[id]/page.tsx`
   - Fetch recipe with `use-recipe` hook
   - Display menu item name, description, image
@@ -258,7 +260,7 @@ supabase/              # Database migrations
   - Add back button to menu
   - Make tests in T018 PASS
 
-- [ ] **T030** Optimize images and performance
+- [x] **T030** Optimize images and performance ✅
   - Configure Next.js Image with Supabase Storage domains
   - Add blur placeholders for images
   - Implement lazy loading for images
@@ -563,11 +565,12 @@ supabase/              # Database migrations
 ## Dependencies
 
 ### Critical Path
+
 ```
-Setup (T001-T005) 
-  → Database (T006-T011) 
-  → Types (T012-T013) 
-  → Customer Tests (T014-T021) 
+Setup (T001-T005)
+  → Database (T006-T011)
+  → Types (T012-T013)
+  → Customer Tests (T014-T021)
   → Customer Implementation (T022-T030)
   → Admin Tests (T031-T036)
   → Admin Implementation (T037-T049)
@@ -578,6 +581,7 @@ Setup (T001-T005)
 ```
 
 ### Key Blocking Dependencies
+
 - T006-T011 (Database) blocks all feature work
 - T012-T013 (Types) blocks component development
 - T014-T021 (Customer Tests) MUST complete before T022-T030
@@ -586,6 +590,7 @@ Setup (T001-T005)
 - T058-T062 (Validation) blocks T066-T067 (Deployment)
 
 ### Parallel Execution Opportunities
+
 - T003, T004, T005 can run in parallel (different concerns)
 - T012, T013 can run in parallel (different files)
 - T014-T021 can ALL run in parallel (different test files)
@@ -600,12 +605,14 @@ Setup (T001-T005)
 ## Parallel Execution Examples
 
 ### Example 1: Run all customer E2E tests together
+
 ```bash
 # Launch T014-T019 in parallel
 npm run test:e2e -- tests/e2e/customer-menu.spec.ts tests/e2e/search.spec.ts
 ```
 
 ### Example 2: Build customer components in parallel
+
 ```bash
 # T023, T024, T025 can be developed simultaneously by different developers
 # or by AI agents in parallel
@@ -615,6 +622,7 @@ Task 3: "Implement CategoryFilter component in components/customer/category-filt
 ```
 
 ### Example 3: Run all admin E2E tests together
+
 ```bash
 # Launch T031-T036 in parallel
 npm run test:e2e -- tests/e2e/admin-auth.spec.ts tests/e2e/admin-crud.spec.ts
@@ -625,6 +633,7 @@ npm run test:e2e -- tests/e2e/admin-auth.spec.ts tests/e2e/admin-crud.spec.ts
 ## Validation Checklist
 
 ### Pre-Implementation
+
 - [x] All contracts from `contracts/` have corresponding test tasks
 - [x] All entities from `data-model.md` have model/type tasks
 - [x] All user scenarios from `quickstart.md` have test tasks
@@ -633,6 +642,7 @@ npm run test:e2e -- tests/e2e/admin-auth.spec.ts tests/e2e/admin-crud.spec.ts
 - [x] Each task specifies exact file path
 
 ### Post-Implementation
+
 - [ ] All E2E tests pass
 - [ ] 80%+ code coverage achieved
 - [ ] Performance targets met (load <3s, search <500ms)

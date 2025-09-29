@@ -17,22 +17,26 @@ This document defines the contract between the Next.js application and Supabase 
 **Purpose**: Retrieve all menu items grouped by category for display
 
 **Query**:
+
 ```typescript
 supabase
   .from('menu_items')
-  .select(`
+  .select(
+    `
     id,
     name,
     description,
     image_url,
     category:categories(id, name, display_order),
     recipe:recipes(id)
-  `)
+  `
+  )
   .order('category.display_order', { ascending: true })
   .order('name', { ascending: true })
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: [
@@ -54,6 +58,7 @@ supabase
 ```
 
 **Response Error**:
+
 ```typescript
 {
   data: null,
@@ -75,24 +80,29 @@ supabase
 **Purpose**: Search menu items by name or description
 
 **Query**:
+
 ```typescript
 supabase
   .from('menu_items')
-  .select(`
+  .select(
+    `
     id,
     name,
     description,
     image_url,
     category:categories(id, name)
-  `)
+  `
+  )
   .or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
   .limit(50)
 ```
 
 **Parameters**:
+
 - `searchTerm`: string (1-100 characters)
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: MenuItem[], // Same structure as GET Menu Items
@@ -109,10 +119,12 @@ supabase
 **Purpose**: Find menu items containing specific ingredients
 
 **Query**:
+
 ```typescript
 supabase
   .from('recipes')
-  .select(`
+  .select(
+    `
     id,
     menu_item:menu_items(
       id,
@@ -121,15 +133,18 @@ supabase
       image_url,
       category:categories(id, name)
     )
-  `)
+  `
+  )
   .contains('ingredients', [{ name: searchTerm }])
   .limit(50)
 ```
 
 **Parameters**:
+
 - `searchTerm`: string (ingredient name)
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: [
@@ -157,25 +172,30 @@ supabase
 **Purpose**: Get menu items in a specific category
 
 **Query**:
+
 ```typescript
 supabase
   .from('menu_items')
-  .select(`
+  .select(
+    `
     id,
     name,
     description,
     image_url,
     category:categories(id, name),
     recipe:recipes(id)
-  `)
+  `
+  )
   .eq('category_id', categoryId)
   .order('name', { ascending: true })
 ```
 
 **Parameters**:
+
 - `categoryId`: UUID
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: MenuItem[], // Same structure as GET Menu Items
@@ -190,10 +210,12 @@ supabase
 **Purpose**: Retrieve full recipe for a menu item
 
 **Query**:
+
 ```typescript
 supabase
   .from('recipes')
-  .select(`
+  .select(
+    `
     id,
     ingredients,
     instructions,
@@ -204,15 +226,18 @@ supabase
       description,
       image_url
     )
-  `)
+  `
+  )
   .eq('menu_item_id', menuItemId)
   .single()
 ```
 
 **Parameters**:
+
 - `menuItemId`: UUID
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: {
@@ -239,6 +264,7 @@ supabase
 ```
 
 **Response Error (404)**:
+
 ```typescript
 {
   data: null,
@@ -256,6 +282,7 @@ supabase
 **Purpose**: Retrieve all categories for filter dropdown
 
 **Query**:
+
 ```typescript
 supabase
   .from('categories')
@@ -264,6 +291,7 @@ supabase
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: [
@@ -291,18 +319,20 @@ supabase
 **Purpose**: Create a new menu category
 
 **Query**:
+
 ```typescript
 supabase
   .from('categories')
   .insert({
-    name: "New Category",
-    display_order: 10
+    name: 'New Category',
+    display_order: 10,
   })
   .select()
   .single()
 ```
 
 **Request Body**:
+
 ```typescript
 {
   name: string, // 1-100 chars, unique
@@ -311,6 +341,7 @@ supabase
 ```
 
 **Response Success (201)**:
+
 ```typescript
 {
   data: {
@@ -324,6 +355,7 @@ supabase
 ```
 
 **Response Error (409 - Duplicate)**:
+
 ```typescript
 {
   data: null,
@@ -343,23 +375,27 @@ supabase
 **Purpose**: Create a new menu item
 
 **Query**:
+
 ```typescript
 supabase
   .from('menu_items')
   .insert({
-    name: "New Dish",
-    description: "Description",
-    category_id: "uuid",
-    image_url: "https://..." | null
+    name: 'New Dish',
+    description: 'Description',
+    category_id: 'uuid',
+    image_url: 'https://...' | null,
   })
-  .select(`
+  .select(
+    `
     *,
     category:categories(*)
-  `)
+  `
+  )
   .single()
 ```
 
 **Request Body**:
+
 ```typescript
 {
   name: string, // 1-200 chars
@@ -370,6 +406,7 @@ supabase
 ```
 
 **Response Success (201)**:
+
 ```typescript
 {
   data: {
@@ -391,6 +428,7 @@ supabase
 ```
 
 **Response Error (400 - Invalid Category)**:
+
 ```typescript
 {
   data: null,
@@ -410,25 +448,22 @@ supabase
 **Purpose**: Create a recipe for a menu item
 
 **Query**:
+
 ```typescript
 supabase
   .from('recipes')
   .insert({
-    menu_item_id: "uuid",
-    ingredients: [
-      { name: "Ingredient 1", amount: "1 cup" }
-    ],
-    instructions: [
-      "Step 1",
-      "Step 2"
-    ],
-    prep_time_mins: 30
+    menu_item_id: 'uuid',
+    ingredients: [{ name: 'Ingredient 1', amount: '1 cup' }],
+    instructions: ['Step 1', 'Step 2'],
+    prep_time_mins: 30,
   })
   .select()
   .single()
 ```
 
 **Request Body**:
+
 ```typescript
 {
   menu_item_id: string, // UUID, must exist, must not have recipe
@@ -442,6 +477,7 @@ supabase
 ```
 
 **Response Success (201)**:
+
 ```typescript
 {
   data: {
@@ -458,6 +494,7 @@ supabase
 ```
 
 **Response Error (409 - Recipe Exists)**:
+
 ```typescript
 {
   data: null,
@@ -477,12 +514,13 @@ supabase
 **Purpose**: Update an existing menu item
 
 **Query**:
+
 ```typescript
 supabase
   .from('menu_items')
   .update({
-    name: "Updated Name",
-    description: "Updated description"
+    name: 'Updated Name',
+    description: 'Updated description',
   })
   .eq('id', menuItemId)
   .select()
@@ -490,9 +528,11 @@ supabase
 ```
 
 **Parameters**:
+
 - `menuItemId`: UUID
 
 **Request Body** (partial update):
+
 ```typescript
 {
   name?: string,
@@ -503,6 +543,7 @@ supabase
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: {
@@ -521,6 +562,7 @@ supabase
 **Purpose**: Update an existing recipe
 
 **Query**:
+
 ```typescript
 supabase
   .from('recipes')
@@ -534,9 +576,11 @@ supabase
 ```
 
 **Parameters**:
+
 - `recipeId`: UUID
 
 **Request Body** (partial update):
+
 ```typescript
 {
   ingredients?: Ingredient[],
@@ -546,6 +590,7 @@ supabase
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: {
@@ -564,17 +609,17 @@ supabase
 **Purpose**: Delete a menu item (cascades to recipe)
 
 **Query**:
+
 ```typescript
-supabase
-  .from('menu_items')
-  .delete()
-  .eq('id', menuItemId)
+supabase.from('menu_items').delete().eq('id', menuItemId)
 ```
 
 **Parameters**:
+
 - `menuItemId`: UUID
 
 **Response Success (204)**:
+
 ```typescript
 {
   data: null,
@@ -583,6 +628,7 @@ supabase
 ```
 
 **Side Effects**:
+
 - Associated recipe is automatically deleted (CASCADE)
 - Image should be deleted from storage separately
 
@@ -595,17 +641,17 @@ supabase
 **Purpose**: Delete a recipe (menu item remains)
 
 **Query**:
+
 ```typescript
-supabase
-  .from('recipes')
-  .delete()
-  .eq('id', recipeId)
+supabase.from('recipes').delete().eq('id', recipeId)
 ```
 
 **Parameters**:
+
 - `recipeId`: UUID
 
 **Response Success (204)**:
+
 ```typescript
 {
   data: null,
@@ -622,17 +668,17 @@ supabase
 **Purpose**: Delete a category (only if no menu items)
 
 **Query**:
+
 ```typescript
-supabase
-  .from('categories')
-  .delete()
-  .eq('id', categoryId)
+supabase.from('categories').delete().eq('id', categoryId)
 ```
 
 **Parameters**:
+
 - `categoryId`: UUID
 
 **Response Success (204)**:
+
 ```typescript
 {
   data: null,
@@ -641,6 +687,7 @@ supabase
 ```
 
 **Response Error (409 - Has Menu Items)**:
+
 ```typescript
 {
   data: null,
@@ -664,20 +711,21 @@ supabase
 **Endpoint**: Supabase Storage API
 
 **Request**:
+
 ```typescript
-supabase.storage
-  .from('menu-images')
-  .upload(`${menuItemId}.jpg`, file, {
-    cacheControl: '3600',
-    upsert: true
-  })
+supabase.storage.from('menu-images').upload(`${menuItemId}.jpg`, file, {
+  cacheControl: '3600',
+  upsert: true,
+})
 ```
 
 **Parameters**:
+
 - `menuItemId`: UUID (used as filename)
 - `file`: File object (max 5MB, JPEG/PNG/WebP)
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: {
@@ -688,6 +736,7 @@ supabase.storage
 ```
 
 **Response Error (413 - File Too Large)**:
+
 ```typescript
 {
   data: null,
@@ -707,17 +756,17 @@ supabase.storage
 **Purpose**: Get public URL for uploaded image
 
 **Request**:
+
 ```typescript
-supabase.storage
-  .from('menu-images')
-  .getPublicUrl(`${menuItemId}.jpg`)
+supabase.storage.from('menu-images').getPublicUrl(`${menuItemId}.jpg`)
 ```
 
 **Response**:
+
 ```typescript
 {
   data: {
-    publicUrl: "https://...storage.supabase.co/object/public/menu-images/uuid.jpg"
+    publicUrl: 'https://...storage.supabase.co/object/public/menu-images/uuid.jpg'
   }
 }
 ```
@@ -731,13 +780,13 @@ supabase.storage
 **Purpose**: Delete menu item image from storage
 
 **Request**:
+
 ```typescript
-supabase.storage
-  .from('menu-images')
-  .remove([`${menuItemId}.jpg`])
+supabase.storage.from('menu-images').remove([`${menuItemId}.jpg`])
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: [
@@ -760,14 +809,16 @@ supabase.storage
 **Purpose**: Admin user authentication
 
 **Request**:
+
 ```typescript
 supabase.auth.signInWithPassword({
-  email: "admin@bistro.com",
-  password: "secure-password"
+  email: 'admin@bistro.com',
+  password: 'secure-password',
 })
 ```
 
 **Response Success (200)**:
+
 ```typescript
 {
   data: {
@@ -790,6 +841,7 @@ supabase.auth.signInWithPassword({
 ```
 
 **Response Error (400 - Invalid Credentials)**:
+
 ```typescript
 {
   data: {
@@ -809,11 +861,13 @@ supabase.auth.signInWithPassword({
 **Purpose**: End admin session
 
 **Request**:
+
 ```typescript
 supabase.auth.signOut()
 ```
 
 **Response Success (204)**:
+
 ```typescript
 {
   error: null
@@ -827,11 +881,13 @@ supabase.auth.signOut()
 **Purpose**: Check if user is authenticated
 
 **Request**:
+
 ```typescript
 supabase.auth.getSession()
 ```
 
 **Response**:
+
 ```typescript
 {
   data: {
@@ -848,19 +904,20 @@ supabase.auth.getSession()
 
 ## Error Codes Reference
 
-| Code | Description | Common Cause |
-|------|-------------|--------------|
-| PGRST116 | No rows found | Record doesn't exist |
-| 23503 | Foreign key violation | Referenced record doesn't exist |
-| 23505 | Unique constraint violation | Duplicate value |
-| 42501 | Insufficient privilege | RLS policy denied access |
-| 413 | Payload too large | File exceeds size limit |
+| Code     | Description                 | Common Cause                    |
+| -------- | --------------------------- | ------------------------------- |
+| PGRST116 | No rows found               | Record doesn't exist            |
+| 23503    | Foreign key violation       | Referenced record doesn't exist |
+| 23505    | Unique constraint violation | Duplicate value                 |
+| 42501    | Insufficient privilege      | RLS policy denied access        |
+| 413      | Payload too large           | File exceeds size limit         |
 
 ---
 
 ## Rate Limiting
 
 Supabase enforces rate limits on free tier:
+
 - **Database queries**: 500 requests per second
 - **Storage operations**: 200 requests per second
 - **Auth operations**: 30 requests per hour per IP
@@ -872,6 +929,7 @@ For production, consider upgrading to Pro tier for higher limits.
 ## Testing Contracts
 
 All endpoints should have corresponding contract tests that verify:
+
 1. Request/response structure matches specification
 2. Error responses match expected format
 3. Authorization is enforced correctly

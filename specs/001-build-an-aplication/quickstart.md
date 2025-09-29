@@ -65,6 +65,7 @@ Application should be running at `http://localhost:3000`
 **Goal**: Customer views menu organized by categories
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Observe menu items displayed on page
 3. Verify items are grouped by category sections (Appetizers, Entrees, Desserts, etc.)
@@ -72,6 +73,7 @@ Application should be running at `http://localhost:3000`
 5. Verify items within each category are displayed with name, description, and image (if available)
 
 **Expected Results**:
+
 - ✅ Page loads within 2-3 seconds
 - ✅ Categories appear in correct display order
 - ✅ Menu items are grouped under their categories
@@ -79,6 +81,7 @@ Application should be running at `http://localhost:3000`
 - ✅ Layout is responsive on mobile/tablet/desktop
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/customer-menu.spec.ts
@@ -91,6 +94,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts
 **Goal**: Customer searches for "salmon" and finds relevant dishes
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Locate search input field
 3. Type "salmon" into search box
@@ -98,6 +102,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts
 5. Observe search results
 
 **Expected Results**:
+
 - ✅ Search input is visible and accessible
 - ✅ Results update automatically after 300ms pause
 - ✅ All items with "salmon" in name or description appear
@@ -106,6 +111,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts
 - ✅ Empty search shows all items again
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/search.spec.ts
@@ -118,6 +124,7 @@ npm run test:e2e -- tests/e2e/search.spec.ts
 **Goal**: Customer searches for items containing specific ingredients
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Type "gluten-free" into search box
 3. Observe results showing items with gluten-free ingredients
@@ -125,12 +132,14 @@ npm run test:e2e -- tests/e2e/search.spec.ts
 5. Observe results showing items with dairy ingredients
 
 **Expected Results**:
+
 - ✅ Search finds items by ingredient name
 - ✅ Results include items where ingredient appears in recipe
 - ✅ Search is case-insensitive
 - ✅ Partial matches work (e.g., "gluten" finds "gluten-free")
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/search.spec.ts --grep "ingredient"
@@ -143,18 +152,21 @@ npm run test:e2e -- tests/e2e/search.spec.ts --grep "ingredient"
 **Goal**: Customer filters menu to show only desserts
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Locate category filter dropdown or buttons
 3. Select "Desserts" category
 4. Observe only dessert items displayed
 
 **Expected Results**:
+
 - ✅ Category filter is visible and intuitive
 - ✅ Only items from selected category appear
 - ✅ Filter can be cleared to show all items
 - ✅ Filter works in combination with search
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "filter"
@@ -167,6 +179,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "filter"
 **Goal**: Customer clicks recipe link and views full recipe
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Find a menu item with a recipe link
 3. Click the recipe link
@@ -174,6 +187,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "filter"
 5. Click back/close to return to menu
 
 **Expected Results**:
+
 - ✅ Recipe link only appears for items with recipes
 - ✅ Recipe page shows menu item name, description, and image
 - ✅ Ingredients list is displayed with amounts
@@ -182,6 +196,7 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "filter"
 - ✅ Navigation back to menu works
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "recipe"
@@ -194,17 +209,20 @@ npm run test:e2e -- tests/e2e/customer-menu.spec.ts --grep "recipe"
 **Goal**: Customer searches for non-existent item and sees helpful message
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Type "xyz123nonexistent" into search box
 3. Wait for search to complete
 
 **Expected Results**:
+
 - ✅ "No items found" message is displayed
 - ✅ Message suggests trying different search terms
 - ✅ No error or broken UI
 - ✅ Search can be cleared to show all items again
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/search.spec.ts --grep "no results"
@@ -219,6 +237,7 @@ npm run test:e2e -- tests/e2e/search.spec.ts --grep "no results"
 **Goal**: Admin user logs into admin portal
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000/admin`
 2. Observe redirect to login page (if not authenticated)
 3. Enter admin credentials
@@ -226,6 +245,7 @@ npm run test:e2e -- tests/e2e/search.spec.ts --grep "no results"
 5. Observe redirect to admin dashboard
 
 **Expected Results**:
+
 - ✅ Unauthenticated users redirected to login
 - ✅ Login form validates email/password
 - ✅ Successful login redirects to admin dashboard
@@ -233,10 +253,12 @@ npm run test:e2e -- tests/e2e/search.spec.ts --grep "no results"
 - ✅ Session persists across page refreshes
 
 **Test Credentials**:
+
 - Email: `admin@test.com`
 - Password: `test123` (from seed data)
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-auth.spec.ts
@@ -249,6 +271,7 @@ npm run test:e2e -- tests/e2e/admin-auth.spec.ts
 **Goal**: Admin creates a new menu item
 
 **Steps**:
+
 1. Log in to admin portal
 2. Navigate to "Menu Items" section
 3. Click "Add New Item" button
@@ -261,6 +284,7 @@ npm run test:e2e -- tests/e2e/admin-auth.spec.ts
 6. Observe new item appears in list
 
 **Expected Results**:
+
 - ✅ Form validates required fields
 - ✅ Category dropdown populated from database
 - ✅ Image upload shows progress
@@ -269,6 +293,7 @@ npm run test:e2e -- tests/e2e/admin-auth.spec.ts
 - ✅ Optimistic UI update (item appears before server confirms)
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create menu item"
@@ -281,6 +306,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create menu item"
 **Goal**: Admin updates an existing menu item
 
 **Steps**:
+
 1. Log in to admin portal
 2. Navigate to "Menu Items" section
 3. Click "Edit" on an existing item
@@ -289,12 +315,14 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create menu item"
 6. Observe changes reflected in list and customer menu
 
 **Expected Results**:
+
 - ✅ Edit form pre-populated with current values
 - ✅ Changes saved successfully
 - ✅ Updated_at timestamp updated
 - ✅ Changes visible in customer menu
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "edit menu item"
@@ -307,6 +335,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "edit menu item"
 **Goal**: Admin deletes a menu item
 
 **Steps**:
+
 1. Log in to admin portal
 2. Navigate to "Menu Items" section
 3. Click "Delete" on a test item
@@ -314,6 +343,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "edit menu item"
 5. Observe item removed from list
 
 **Expected Results**:
+
 - ✅ Confirmation modal prevents accidental deletion
 - ✅ Item removed from database
 - ✅ Associated recipe deleted (cascade)
@@ -321,6 +351,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "edit menu item"
 - ✅ Item no longer appears in customer menu
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "delete menu item"
@@ -333,6 +364,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "delete menu item"
 **Goal**: Admin adds a recipe to a menu item
 
 **Steps**:
+
 1. Log in to admin portal
 2. Navigate to "Recipes" section
 3. Click "Add Recipe" for a menu item without one
@@ -344,6 +376,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "delete menu item"
 6. Observe recipe link appears on customer menu
 
 **Expected Results**:
+
 - ✅ Only menu items without recipes shown in dropdown
 - ✅ Can add/remove ingredient rows dynamically
 - ✅ Can add/remove instruction steps dynamically
@@ -352,6 +385,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "delete menu item"
 - ✅ Recipe link appears on customer menu item
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create recipe"
@@ -364,6 +398,7 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create recipe"
 **Goal**: Admin creates and reorders categories
 
 **Steps**:
+
 1. Log in to admin portal
 2. Navigate to "Categories" section
 3. Click "Add Category"
@@ -374,12 +409,14 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "create recipe"
 8. Observe new category appears in customer menu
 
 **Expected Results**:
+
 - ✅ New category created successfully
 - ✅ Category appears in correct order on customer menu
 - ✅ Cannot delete category with menu items
 - ✅ Display order can be updated
 
 **Validation**:
+
 ```bash
 # Run E2E test
 npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "manage categories"
@@ -394,18 +431,21 @@ npm run test:e2e -- tests/e2e/admin-crud.spec.ts --grep "manage categories"
 **Goal**: Verify menu loads within 2-3 seconds
 
 **Steps**:
+
 1. Clear browser cache
 2. Open DevTools Network tab
 3. Navigate to `http://localhost:3000`
 4. Measure time to "DOMContentLoaded"
 
 **Expected Results**:
+
 - ✅ Initial HTML loads < 500ms
 - ✅ Full page interactive < 2-3 seconds
 - ✅ Images lazy load as user scrolls
 - ✅ Lighthouse Performance score > 80
 
 **Validation**:
+
 ```bash
 # Run Lighthouse
 npm run lighthouse
@@ -421,17 +461,20 @@ npm run test:performance
 **Goal**: Verify search completes within 500ms
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Open DevTools Network tab
 3. Type search term
 4. Measure time from last keystroke to results displayed
 
 **Expected Results**:
+
 - ✅ Debounce delays search by 300ms
 - ✅ API call completes < 200ms
 - ✅ Total time from typing to results < 500ms
 
 **Validation**:
+
 ```bash
 # Run performance test
 npm run test:performance -- --grep "search"
@@ -446,12 +489,14 @@ npm run test:performance -- --grep "search"
 **Goal**: Verify menu is navigable via keyboard
 
 **Steps**:
+
 1. Navigate to `http://localhost:3000`
 2. Use Tab key to navigate through elements
 3. Use Enter/Space to activate buttons/links
 4. Verify focus indicators are visible
 
 **Expected Results**:
+
 - ✅ All interactive elements reachable via Tab
 - ✅ Focus indicators clearly visible
 - ✅ Logical tab order (top to bottom, left to right)
@@ -459,6 +504,7 @@ npm run test:performance -- --grep "search"
 - ✅ Recipe links activatable via Enter
 
 **Validation**:
+
 ```bash
 # Run accessibility test
 npm run test:a11y
@@ -471,11 +517,13 @@ npm run test:a11y
 **Goal**: Verify menu is usable with screen reader
 
 **Steps**:
+
 1. Enable screen reader (VoiceOver on Mac, NVDA on Windows)
 2. Navigate to `http://localhost:3000`
 3. Listen to announcements as you navigate
 
 **Expected Results**:
+
 - ✅ Page title announced
 - ✅ Category headings announced
 - ✅ Menu item names and descriptions read
@@ -484,6 +532,7 @@ npm run test:a11y
 - ✅ Buttons have descriptive labels
 
 **Validation**:
+
 ```bash
 # Run accessibility test
 npm run test:a11y
@@ -498,11 +547,13 @@ npm run test:a11y
 **Goal**: Verify graceful handling of database errors
 
 **Steps**:
+
 1. Temporarily break Supabase connection (invalid URL)
 2. Navigate to `http://localhost:3000`
 3. Observe error handling
 
 **Expected Results**:
+
 - ✅ Error message displayed (not raw error)
 - ✅ User can retry
 - ✅ No application crash
@@ -515,11 +566,13 @@ npm run test:a11y
 **Goal**: Verify handling of missing/broken images
 
 **Steps**:
+
 1. Create menu item with invalid image URL
 2. Navigate to customer menu
 3. Observe placeholder displayed
 
 **Expected Results**:
+
 - ✅ Placeholder image shown
 - ✅ No broken image icon
 - ✅ Layout not broken
@@ -556,21 +609,25 @@ All scenarios must pass for feature to be considered complete:
 ## Troubleshooting
 
 ### Menu not loading
+
 - Check Supabase connection in `.env.local`
 - Verify migrations applied: `npx supabase db push`
 - Check browser console for errors
 
 ### Search not working
+
 - Verify GIN indexes created on database
 - Check network tab for API errors
 - Verify RLS policies allow public read
 
 ### Admin portal access denied
+
 - Verify user has `role: 'admin'` in JWT
 - Check RLS policies in Supabase Dashboard
 - Verify authentication working: `supabase.auth.getSession()`
 
 ### Images not displaying
+
 - Verify Storage bucket created and public
 - Check image URLs in database
 - Verify RLS policies on storage bucket
@@ -580,6 +637,7 @@ All scenarios must pass for feature to be considered complete:
 ## Next Steps
 
 After quickstart validation passes:
+
 1. Run full test suite: `npm run test`
 2. Deploy to staging environment
 3. Perform UAT with stakeholders

@@ -65,11 +65,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "menu_items_category_id_fkey"
-            columns: ["category_id"]
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'menu_items_category_id_fkey'
+            columns: ['category_id']
+            referencedRelation: 'categories'
+            referencedColumns: ['id']
+          },
         ]
       }
       recipes: {
@@ -102,11 +102,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "recipes_menu_item_id_fkey"
-            columns: ["menu_item_id"]
-            referencedRelation: "menu_items"
-            referencedColumns: ["id"]
-          }
+            foreignKeyName: 'recipes_menu_item_id_fkey'
+            columns: ['menu_item_id']
+            referencedRelation: 'menu_items'
+            referencedColumns: ['id']
+          },
         ]
       }
     }
@@ -133,12 +133,16 @@ export interface Ingredient {
 
 // Convenience types
 export type Category = Database['public']['Tables']['categories']['Row']
-export type CategoryInsert = Database['public']['Tables']['categories']['Insert']
-export type CategoryUpdate = Database['public']['Tables']['categories']['Update']
+export type CategoryInsert =
+  Database['public']['Tables']['categories']['Insert']
+export type CategoryUpdate =
+  Database['public']['Tables']['categories']['Update']
 
 export type MenuItem = Database['public']['Tables']['menu_items']['Row']
-export type MenuItemInsert = Database['public']['Tables']['menu_items']['Insert']
-export type MenuItemUpdate = Database['public']['Tables']['menu_items']['Update']
+export type MenuItemInsert =
+  Database['public']['Tables']['menu_items']['Insert']
+export type MenuItemUpdate =
+  Database['public']['Tables']['menu_items']['Update']
 
 export type Recipe = Database['public']['Tables']['recipes']['Row']
 export type RecipeInsert = Database['public']['Tables']['recipes']['Insert']

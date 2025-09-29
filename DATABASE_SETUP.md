@@ -17,6 +17,7 @@ npm run db:start
 ```
 
 This will:
+
 - Start a local Supabase instance using Docker
 - Create a local PostgreSQL database
 - Start Supabase Studio at http://localhost:54323
@@ -36,6 +37,7 @@ npm run db:seed
 ```
 
 This will populate the database with sample data:
+
 - 5 categories (Appetizers, Entrees, Desserts, Beverages, Sides)
 - 20 menu items across categories
 - 5 recipes with detailed ingredients and instructions
@@ -148,12 +150,14 @@ npx supabase gen types typescript --project-id <your-project-ref> > lib/supabase
 ### Tables
 
 **categories**
+
 - `id` (UUID, PK)
 - `name` (VARCHAR(100), UNIQUE)
 - `display_order` (INTEGER)
 - `created_at` (TIMESTAMP)
 
 **menu_items**
+
 - `id` (UUID, PK)
 - `name` (VARCHAR(200))
 - `description` (TEXT)
@@ -163,6 +167,7 @@ npx supabase gen types typescript --project-id <your-project-ref> > lib/supabase
 - `updated_at` (TIMESTAMP)
 
 **recipes**
+
 - `id` (UUID, PK)
 - `menu_item_id` (UUID, FK → menu_items, UNIQUE)
 - `ingredients` (JSONB)
@@ -176,10 +181,12 @@ npx supabase gen types typescript --project-id <your-project-ref> > lib/supabase
 All tables have RLS enabled:
 
 **Public Access (Read)**:
+
 - Anyone (authenticated or anonymous) can read all data
 - Enables customer menu browsing without login
 
 **Admin Access (Write)**:
+
 - Only authenticated users with `role: 'admin'` in JWT can:
   - INSERT new records
   - UPDATE existing records
@@ -188,6 +195,7 @@ All tables have RLS enabled:
 ### Storage Bucket
 
 **menu-images**:
+
 - Public read access for all users
 - Admin-only write access (upload, update, delete)
 - Max file size: 5MB
@@ -223,7 +231,7 @@ CREATE OR REPLACE FUNCTION make_user_admin(user_email TEXT)
 RETURNS void AS $$
 BEGIN
   UPDATE auth.users
-  SET raw_user_meta_data = 
+  SET raw_user_meta_data =
     COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"role": "admin"}'::jsonb
   WHERE email = user_email;
 END;
@@ -241,13 +249,11 @@ import { createClient } from '@/lib/supabase/client'
 const supabase = createClient()
 
 // This should work for admin users
-const { data, error } = await supabase
-  .from('menu_items')
-  .insert({
-    name: 'Test Item',
-    description: 'Test',
-    category_id: '<some-category-id>'
-  })
+const { data, error } = await supabase.from('menu_items').insert({
+  name: 'Test Item',
+  description: 'Test',
+  category_id: '<some-category-id>',
+})
 ```
 
 ---
@@ -255,29 +261,35 @@ const { data, error } = await supabase
 ## Troubleshooting
 
 ### Docker not running
+
 ```
 Error: Cannot connect to the Docker daemon
 ```
+
 **Solution**: Start Docker Desktop
 
 ### Migrations not applying
+
 ```bash
 # Reset and reapply all migrations
 npm run db:reset
 ```
 
 ### Types out of sync
+
 ```bash
 # Regenerate types from current schema
 npm run db:types
 ```
 
 ### RLS blocking queries
+
 - Check that public read policies are enabled
 - For admin operations, ensure user has `role: 'admin'` in JWT
 - Test policies in Supabase Dashboard → SQL Editor
 
 ### Seed data not loading
+
 - Ensure migrations are applied first
 - Check for foreign key constraint errors
 - Verify categories are created before menu items
@@ -287,6 +299,7 @@ npm run db:types
 ## Next Steps
 
 After database setup:
+
 1. Verify connection by running the app: `npm run dev`
 2. Check that menu items load on homepage
 3. Test admin login and CRUD operations

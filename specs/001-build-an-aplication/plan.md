@@ -1,10 +1,10 @@
-
 # Implementation Plan: Interactive Bistro Menu Display
 
 **Branch**: `001-build-an-aplication` | **Date**: 2025-09-29 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/001-build-an-aplication/spec.md`
 
 ## Execution Flow (/plan command scope)
+
 ```
 1. Load feature spec from Input path
    → If not found: ERROR "No feature spec at {path}"
@@ -27,13 +27,16 @@
 ```
 
 **IMPORTANT**: The /plan command STOPS at step 7. Phases 2-4 are executed by other commands:
+
 - Phase 2: /tasks command creates tasks.md
 - Phase 3-4: Implementation execution (manual or via tools)
 
 ## Summary
+
 Build an interactive bistro menu application with customer-facing display and admin portal. Customers can browse menu items organized by category, search by name/ingredients/category, and view recipes. Admin staff can manage menu items, recipes, and categories. The application will use Next.js with TypeScript for the frontend, Supabase for data and image storage, and shadcn/ui components for a classy bistro aesthetic.
 
 ## Technical Context
+
 **Language/Version**: TypeScript (latest), Node.js 18+  
 **Primary Dependencies**: Next.js 14+ (App Router), React 18+, shadcn/ui, Supabase client, Tailwind CSS  
 **Storage**: Supabase (PostgreSQL database + Storage for images)  
@@ -45,37 +48,44 @@ Build an interactive bistro menu application with customer-facing display and ad
 **Scale/Scope**: Single bistro, ~50-100 menu items, ~10-20 categories, 5-10 admin users, unlimited customers
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### I. User-Centric Design ✅
+
 - Customer menu browsing with intuitive search/filter meets user needs
 - Admin portal provides straightforward CRUD operations
 - Minimal training required for both customer and admin interfaces
 
 ### II. Data Integrity ⚠️ DEVIATION
+
 - **Spec does not require nutritional information** (constitution requires complete nutritional data)
 - **No historical record tracking specified** (constitution requires change history)
 - Ingredient lists supported but accuracy enforcement not specified
 - **Justification**: Initial MVP focuses on menu display; nutritional data can be added in future iteration
 
 ### III. Test-First Development ✅
+
 - Plan includes contract tests before implementation
 - Integration tests for user scenarios
 - Edge case testing for search, empty states, etc.
 
 ### IV. Performance & Scalability ⚠️ PARTIAL
+
 - **Menu load target is 2-3 seconds** (constitution requires sub-second)
 - Search and filtering will be efficient with Supabase indexes
 - **Single location only** (constitution mentions multi-location support)
 - **Justification**: 2-3 second load acceptable for initial version; can optimize later. Single location is explicit scope decision.
 
 ### V. Compliance & Standards ⚠️ DEVIATION
+
 - **Standard web accessibility only** (constitution requires WCAG 2.1 AA minimum)
 - Dietary standards supported via ingredient search
 - Food labeling regulations not explicitly addressed
 - **Justification**: User explicitly chose standard practices over WCAG 2.1 AA compliance
 
 ### Development Standards ✅
+
 - TypeScript provides strong typing and code quality
 - 80%+ code coverage target maintained
 - Integration tests for menu workflows
@@ -84,6 +94,7 @@ Build an interactive bistro menu application with customer-facing display and ad
 ## Project Structure
 
 ### Documentation (this feature)
+
 ```
 specs/[###-feature]/
 ├── plan.md              # This file (/plan command output)
@@ -95,12 +106,14 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
+
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
   for this feature. Delete unused options and expand the chosen structure with
   real paths (e.g., apps/admin, packages/something). The delivered plan must
   not include Option labels.
 -->
+
 ```
 # Next.js App Router Structure
 app/
@@ -153,12 +166,14 @@ supabase/
 **Structure Decision**: Next.js 14+ App Router with full-stack architecture. Supabase handles all backend concerns (database, auth, storage), eliminating need for separate backend. Customer and admin routes separated using route groups. shadcn/ui components in `/components/ui`, feature-specific components organized by domain (customer/admin).
 
 ## Phase 0: Outline & Research
+
 1. **Extract unknowns from Technical Context** above:
    - For each NEEDS CLARIFICATION → research task
    - For each dependency → best practices task
    - For each integration → patterns task
 
 2. **Generate and dispatch research agents**:
+
    ```
    For each unknown in Technical Context:
      Task: "Research {unknown} for {feature context}"
@@ -174,7 +189,8 @@ supabase/
 **Output**: research.md with all NEEDS CLARIFICATION resolved
 
 ## Phase 1: Design & Contracts
-*Prerequisites: research.md complete*
+
+_Prerequisites: research.md complete_
 
 1. **Extract entities from feature spec** → `data-model.md`:
    - Entity name, fields, relationships
@@ -204,12 +220,14 @@ supabase/
    - Keep under 150 lines for token efficiency
    - Output to repository root
 
-**Output**: data-model.md, /contracts/*, failing tests, quickstart.md, agent-specific file
+**Output**: data-model.md, /contracts/\*, failing tests, quickstart.md, agent-specific file
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+
+_This section describes what the /tasks command will do - DO NOT execute during /plan_
 
 **Task Generation Strategy**:
+
 - Load `.specify/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
 - Follow TDD approach: tests before implementation
@@ -271,6 +289,7 @@ supabase/
    - Update README with deployment instructions
 
 **Ordering Strategy**:
+
 - Setup tasks first (blocking)
 - Database before application code
 - Tests before implementation (TDD)
@@ -282,6 +301,7 @@ supabase/
 **Estimated Output**: 35-40 numbered, ordered tasks in tasks.md
 
 **Dependency Graph**:
+
 ```
 Setup → Database → Types → Tests → Implementation → Styling → Performance → Validation
 ```
@@ -289,26 +309,29 @@ Setup → Database → Types → Tests → Implementation → Styling → Perfor
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
 ## Phase 3+: Future Implementation
-*These phases are beyond the scope of the /plan command*
+
+_These phases are beyond the scope of the /plan command_
 
 **Phase 3**: Task execution (/tasks command creates tasks.md)  
 **Phase 4**: Implementation (execute tasks.md following constitutional principles)  
 **Phase 5**: Validation (run tests, execute quickstart.md, performance validation)
 
 ## Complexity Tracking
-*Fill ONLY if Constitution Check has violations that must be justified*
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| No nutritional data | MVP focuses on menu display first | Adding nutritional tracking would delay launch; can be added in v2 |
-| 2-3 second load time | Acceptable for initial version | Sub-second requires CDN/caching infrastructure beyond MVP scope |
-| Standard accessibility only | User explicitly chose this scope | WCAG 2.1 AA compliance requires additional testing/tooling budget |
+_Fill ONLY if Constitution Check has violations that must be justified_
 
+| Violation                   | Why Needed                        | Simpler Alternative Rejected Because                               |
+| --------------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| No nutritional data         | MVP focuses on menu display first | Adding nutritional tracking would delay launch; can be added in v2 |
+| 2-3 second load time        | Acceptable for initial version    | Sub-second requires CDN/caching infrastructure beyond MVP scope    |
+| Standard accessibility only | User explicitly chose this scope  | WCAG 2.1 AA compliance requires additional testing/tooling budget  |
 
 ## Progress Tracking
-*This checklist is updated during execution flow*
+
+_This checklist is updated during execution flow_
 
 **Phase Status**:
+
 - [x] Phase 0: Research complete (/plan command)
 - [x] Phase 1: Design complete (/plan command)
 - [x] Phase 2: Task planning complete (/plan command - describe approach only)
@@ -317,12 +340,14 @@ Setup → Database → Types → Tests → Implementation → Styling → Perfor
 - [ ] Phase 5: Validation passed
 
 **Gate Status**:
+
 - [x] Initial Constitution Check: PASS (with documented deviations)
 - [x] Post-Design Constitution Check: PASS (deviations justified in Complexity Tracking)
 - [x] All NEEDS CLARIFICATION resolved (via research.md)
 - [x] Complexity deviations documented
 
 **Artifacts Generated**:
+
 - [x] research.md - Technology decisions and rationale
 - [x] data-model.md - Database schema and entities
 - [x] contracts/supabase-api.md - API contracts and specifications
@@ -331,4 +356,5 @@ Setup → Database → Types → Tests → Implementation → Styling → Perfor
 - [x] .windsurf/rules/specify-rules.md - Agent context updated
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+
+_Based on Constitution v2.1.1 - See `/memory/constitution.md`_
