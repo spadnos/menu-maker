@@ -28,7 +28,7 @@ supabase/              # Database migrations
   - Configure `tsconfig.json` with strict mode
   - Set up `next.config.js` with image domains for Supabase Storage
 
-- [ ] **T002** Configure Supabase client and environment
+- [x] **T002** Configure Supabase client and environment ✅
   - Install: `npm install @supabase/supabase-js @supabase/ssr`
   - Create `lib/supabase/client.ts` for client-side Supabase client
   - Create `lib/supabase/server.ts` for server-side Supabase client
@@ -60,34 +60,34 @@ supabase/              # Database migrations
 
 ## Phase 3.2: Database & Infrastructure
 
-- [ ] **T006** Create Supabase project and configure locally
+- [x] **T006** Create Supabase project and configure locally ✅
   - Create Supabase project via dashboard or CLI
   - Install Supabase CLI: `npm install -D supabase`
   - Run `npx supabase init` to create `supabase/` directory
   - Link to remote project: `npx supabase link --project-ref <ref>`
 
-- [ ] **T007** Create database schema migration
+- [x] **T007** Create database schema migration ✅
   - Create `supabase/migrations/20250929000001_initial_schema.sql`
   - Add tables: `categories`, `menu_items`, `recipes` (from data-model.md)
   - Add indexes: GIN for full-text search, B-tree for foreign keys
   - Add triggers for `updated_at` timestamps
   - Add constraints: foreign keys, unique constraints, check constraints
 
-- [ ] **T008** Create RLS policies migration
+- [x] **T008** Create RLS policies migration ✅
   - Create `supabase/migrations/20250929000002_rls_policies.sql`
   - Enable RLS on all tables
   - Add public read policies for anonymous users
   - Add admin write policies checking JWT role
   - Test policies with sample queries
 
-- [ ] **T009** Create storage bucket for menu images
+- [x] **T009** Create storage bucket for menu images ✅
   - Create `supabase/migrations/20250929000003_storage_bucket.sql`
   - Create `menu-images` bucket with public read access
   - Set max file size to 5MB
   - Restrict MIME types to image/jpeg, image/png, image/webp
   - Add RLS policies for admin upload/delete
 
-- [ ] **T010** Create seed data for development
+- [x] **T010** Create seed data for development ✅
   - Create `supabase/seed.sql` with sample data
   - Add 3-5 categories (Appetizers, Entrees, Desserts, Beverages, Sides)
   - Add 15-20 menu items across categories
@@ -95,7 +95,7 @@ supabase/              # Database migrations
   - Add test admin user with role metadata
   - Include sample images (use placeholder URLs)
 
-- [ ] **T011** Apply migrations and generate TypeScript types
+- [x] **T011** Apply migrations and generate TypeScript types ✅
   - Run `npx supabase db push` to apply migrations
   - Run `npx supabase gen types typescript --local > lib/supabase/types.ts`
   - Verify types match data-model.md specifications
