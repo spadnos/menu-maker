@@ -1,50 +1,59 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Menu Maker Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. User-Centric Design
+- All features must solve real user needs for menu management
+- Prioritize intuitive interfaces that require minimal training
+- Support multiple menu types (a la carte, prix fixe, dietary-specific)
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Data Integrity (NON-NEGOTIABLE)
+- All menu items must have complete nutritional information
+- Ingredient lists must be accurate and up-to-date
+- Changes to menu items must maintain historical records for reporting
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First Development
+- All features require automated tests before implementation
+- Menu calculations must be verified with test cases
+- Edge cases for dietary restrictions must be tested
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Performance & Scalability
+- Menu loading must be sub-second even with large catalogs
+- Support for multiple locations with different menus
+- Efficient search and filtering capabilities
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Compliance & Standards
+- Adhere to food labeling regulations
+- Support for common dietary standards (vegan, gluten-free, etc.)
+- Accessibility compliance (WCAG 2.1 AA minimum)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Development Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Code Quality
+- Follow language-specific style guides
+- Document public APIs and complex logic
+- Regular code reviews with at least one approver
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Testing Requirements
+- 80%+ code coverage for all new features
+- Integration tests for menu modification workflows
+- Performance benchmarks for critical paths
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Versioning
+- Follow Semantic Versioning (MAJOR.MINOR.PATCH)
+- Document breaking changes in release notes
+- Maintain backward compatibility within major versions
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### Contribution Guidelines
+- Feature proposals require use cases and success criteria
+- Bug reports must include reproduction steps
+- All contributions require passing tests and documentation updates
+
+### Review Process
+- All changes require code review
+- Security-sensitive changes need additional review
+- Performance-impacting changes require benchmarks
+
+**Version**: 1.0.0 | **Ratified**: 2025-09-29 | **Last Amended**: 2025-09-29
