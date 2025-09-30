@@ -11,6 +11,7 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  testMatch: ['**/*.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -31,18 +32,27 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Admin tests (run in a single browser for speed)
     {
-      name: 'chromium',
+      name: 'admin',
+      testMatch: '**/admin-*.spec.ts',
       use: { ...devices['Desktop Chrome'] },
     },
 
+    // Customer-facing tests (run in all browsers)
+    {
+      name: 'customer',
+      testIgnore: '**/admin-*.spec.ts',
+      use: { ...devices['Desktop Chrome'] },
+    },
     {
       name: 'firefox',
+      testIgnore: '**/admin-*.spec.ts',
       use: { ...devices['Desktop Firefox'] },
     },
-
     {
       name: 'webkit',
+      testIgnore: '**/admin-*.spec.ts',
       use: { ...devices['Desktop Safari'] },
     },
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/utils/supabase/client'
 import type { RecipeWithMenuItem } from '@/lib/supabase/types'
 
 export function useRecipe(menuItemId: string | null) {
@@ -10,12 +10,7 @@ export function useRecipe(menuItemId: string | null) {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    if (!menuItemId) {
-      setLoading(false)
-      return
-    }
-
-    async function fetchRecipe() {
+    async function fetchRecipe(id: string) {
       try {
         setLoading(true)
         const supabase = createClient()
@@ -28,7 +23,7 @@ export function useRecipe(menuItemId: string | null) {
             menu_item:menu_items(*)
           `
           )
-          .eq('menu_item_id', menuItemId)
+          .eq('menu_item_id', id)
           .single()
 
         if (fetchError) {
@@ -52,7 +47,12 @@ export function useRecipe(menuItemId: string | null) {
       }
     }
 
-    fetchRecipe()
+    if (menuItemId) {
+      fetchRecipe(menuItemId)
+    } else {
+      setLoading(false)
+      setRecipe(null)
+    }
   }, [menuItemId])
 
   return { recipe, loading, error }

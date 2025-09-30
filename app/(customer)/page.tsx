@@ -2,10 +2,12 @@
 
 import { useState, useMemo } from 'react'
 import { useMenuItems, useCategories, useSearch } from '@/lib/hooks'
-import { MenuItemCard } from '@/components/customer/menu-item-card'
 import { SearchBar } from '@/components/customer/search-bar'
 import { CategoryFilter } from '@/components/customer/category-filter'
 import { EmptyState } from '@/components/customer/empty-state'
+import { MenuItemFull } from '@/lib/supabase/types'
+import { MenuItem } from '@/components/menu-item'
+import { MenuCategory } from '@/components/menu-category'
 
 export default function MenuPage() {
   const { menuItems, loading: itemsLoading, error: itemsError } = useMenuItems()
@@ -71,49 +73,60 @@ export default function MenuPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Search and Filter Controls */}
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <SearchBar
-          value={searchTerm}
-          onChange={search}
-          onClear={clear}
-          loading={searchLoading}
-        />
-        <CategoryFilter
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
+    <main className="min-h-screen bg-background py-16 px-4">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <header className="text-center mb-16">
+          <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 text-balance">
+            Our Menu
+          </h1>
+          <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-pretty">
+            A curated selection of dishes celebrating the finest ingredients and
+            culinary traditions. Experience the art of fine dining.
+          </p>
+        </header>
+
+        {/* Menu Categories */}
+
+        {groupedItems.map(([categoryName, items]) => (
+          <MenuCategory key={categoryName} title={categoryName} items={items} />
+        ))}
       </div>
+    </main>
 
-      {/* Loading State */}
-      {(itemsLoading || categoriesLoading) && (
-        <div className="flex items-center justify-center py-16">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-        </div>
-      )}
+    // <div className="w-full">
+    //   {/* Menu Items Grouped by Category */}
+    //   {!itemsLoading && filteredItems.length > 0 && (
+    //     <div className="space-y-16">
+    //       {groupedItems.map(([categoryName, items]) => (
+    //         <MenuCategory
+    //           key={categoryName}
+    //           title={categoryName}
+    //           items={items}
+    //         />
+    //       ))}
+    //     </div>
+    //   )}
 
-      {/* Empty State */}
-      {!itemsLoading && filteredItems.length === 0 && (
-        <EmptyState onClear={handleClearFilters} />
-      )}
+    //   {/* Loading State */}
+    //   {(itemsLoading || categoriesLoading) && (
+    //     <div className="flex items-center justify-center py-16">
+    //       <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent" />
+    //     </div>
+    //   )}
 
-      {/* Menu Items Grouped by Category */}
-      {!itemsLoading && filteredItems.length > 0 && (
-        <div className="space-y-12">
-          {groupedItems.map(([categoryName, items]) => (
-            <section key={categoryName}>
-              <h2 className="mb-6 text-3xl font-bold">{categoryName}</h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((item) => (
-                  <MenuItemCard key={item.id} item={item as any} />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
-    </div>
+    //   {/* Empty State */}
+    //   {!itemsLoading && filteredItems.length === 0 && (
+    //     <div className="text-center py-16">
+    //       <p className="text-gray-500">No menu items found</p>
+    //       <button
+    //         onClick={handleClearFilters}
+    //         className="mt-4 text-sm text-gray-600 hover:text-black underline"
+    //       >
+    //         Clear all filters
+    //       </button>
+    //     </div>
+    //   )}
+    // </div>
   )
 }
