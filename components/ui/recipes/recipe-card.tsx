@@ -1,12 +1,11 @@
-import { Recipe } from '@/types/database.types'
+import { RecipeType } from '@/types/database.types'
 import Image from 'next/image'
 
 type RecipeCardProps = {
-  recipe: Recipe
+  recipe: RecipeType
 }
 
 function RecipeCard({ recipe }: RecipeCardProps) {
-  console.log(recipe)
   return (
     <a className="group block" href={`/recipes/${recipe.id}`}>
       <div className="aspect-square w-full overflow-hidden rounded-lg bg-gray-200">
@@ -23,7 +22,7 @@ function RecipeCard({ recipe }: RecipeCardProps) {
           {recipe.name}
         </h3>
         <p className="mt-1 text-sm text-subtle-light dark:text-subtle-dark">
-          {recipe.prep_time_mins} minutes
+          {recipe.prep_time_mins && `${recipe.prep_time_mins} minutes`}
         </p>
       </div>
     </a>

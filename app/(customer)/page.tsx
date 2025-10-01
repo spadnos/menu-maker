@@ -1,76 +1,76 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { useMenuItems, useCategories, useSearch } from '@/lib/hooks'
-import { SearchBar } from '@/components/customer/search-bar'
-import { CategoryFilter } from '@/components/customer/category-filter'
-import { EmptyState } from '@/components/customer/empty-state'
-import { MenuItemFull } from '@/lib/supabase/types'
-import { MenuItem } from '@/components/menu-item'
-import { MenuCategory } from '@/components/menu-category'
+// import { useState, useMemo } from 'react'
+// import { useMenuItems, useCategories, useSearch } from '@/lib/hooks'
+// import { SearchBar } from '@/components/customer/search-bar'
+// import { CategoryFilter } from '@/components/customer/category-filter'
+// import { EmptyState } from '@/components/customer/empty-state'
+// import { MenuItemFull } from '@/lib/supabase/types'
+// import { MenuItem } from '@/components/menu-item'
+// import { MenuCategory } from '@/components/menu-category'
 
 export default function MenuPage() {
-  const { menuItems, loading: itemsLoading, error: itemsError } = useMenuItems()
-  const { categories, loading: categoriesLoading } = useCategories()
-  const {
-    searchTerm,
-    results,
-    loading: searchLoading,
-    search,
-    clear,
-    isSearching,
-  } = useSearch()
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  //   const { menuItems, loading: itemsLoading, error: itemsError } = useMenuItems()
+  //   const { categories, loading: categoriesLoading } = useCategories()
+  //   const {
+  //     searchTerm,
+  //     results,
+  //     loading: searchLoading,
+  //     search,
+  //     clear,
+  //     isSearching,
+  //   } = useSearch()
+  //   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  // Filter menu items by category and search
-  const filteredItems = useMemo(() => {
-    if (isSearching) {
-      return selectedCategory
-        ? results.filter((item) => item.category_id === selectedCategory)
-        : results
-    }
+  //   // Filter menu items by category and search
+  //   const filteredItems = useMemo(() => {
+  //     if (isSearching) {
+  //       return selectedCategory
+  //         ? results.filter((item) => item.category_id === selectedCategory)
+  //         : results
+  //     }
 
-    return selectedCategory
-      ? menuItems.filter((item) => item.category_id === selectedCategory)
-      : menuItems
-  }, [menuItems, results, selectedCategory, isSearching])
+  //     return selectedCategory
+  //       ? menuItems.filter((item) => item.category_id === selectedCategory)
+  //       : menuItems
+  //   }, [menuItems, results, selectedCategory, isSearching])
 
-  // Group items by category
-  const groupedItems = useMemo(() => {
-    const groups = new Map<string, typeof filteredItems>()
+  //   // Group items by category
+  //   const groupedItems = useMemo(() => {
+  //     const groups = new Map<string, typeof filteredItems>()
 
-    filteredItems.forEach((item) => {
-      const categoryName = item.category?.name || 'Uncategorized'
-      if (!groups.has(categoryName)) {
-        groups.set(categoryName, [])
-      }
-      groups.get(categoryName)!.push(item)
-    })
+  //     filteredItems.forEach((item) => {
+  //       const categoryName = item.category?.name || 'Uncategorized'
+  //       if (!groups.has(categoryName)) {
+  //         groups.set(categoryName, [])
+  //       }
+  //       groups.get(categoryName)!.push(item)
+  //     })
 
-    // Sort by category display_order
-    return Array.from(groups.entries()).sort((a, b) => {
-      const catA = categories.find((c) => c.name === a[0])
-      const catB = categories.find((c) => c.name === b[0])
-      return (catA?.display_order || 0) - (catB?.display_order || 0)
-    })
-  }, [filteredItems, categories])
+  //     // Sort by category display_order
+  //     return Array.from(groups.entries()).sort((a, b) => {
+  //       const catA = categories.find((c) => c.name === a[0])
+  //       const catB = categories.find((c) => c.name === b[0])
+  //       return (catA?.display_order || 0) - (catB?.display_order || 0)
+  //     })
+  //   }, [filteredItems, categories])
 
-  const handleClearFilters = () => {
-    clear()
-    setSelectedCategory(null)
-  }
+  //   const handleClearFilters = () => {
+  //     clear()
+  //     setSelectedCategory(null)
+  //   }
 
-  if (itemsError) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-center">
-          <p className="text-destructive">
-            Failed to load menu items. Please try again later.
-          </p>
-        </div>
-      </div>
-    )
-  }
+  //   if (itemsError) {
+  //     return (
+  //       <div className="container mx-auto px-4 py-8">
+  //         <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-center">
+  //           <p className="text-destructive">
+  //             Failed to load menu items. Please try again later.
+  //           </p>
+  //         </div>
+  //       </div>
+  //     )
+  //   }
 
   return (
     <main className="min-h-screen bg-background py-16 px-4">
@@ -87,10 +87,10 @@ export default function MenuPage() {
         </header>
 
         {/* Menu Categories */}
-
+        {/* 
         {groupedItems.map(([categoryName, items]) => (
           <MenuCategory key={categoryName} title={categoryName} items={items} />
-        ))}
+        ))} */}
       </div>
     </main>
 

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { createClient } from '@/utils/supabase/server'
 import { Providers } from '@/app/providers'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -17,16 +16,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = await createClient()
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-white`}>
-        <Providers session={session}>
+        <Providers>
           {children}
           <Toaster />
         </Providers>

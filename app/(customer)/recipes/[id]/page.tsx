@@ -1,24 +1,17 @@
-import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
-import { RecipeType } from '@/types/database.types'
 import Image from 'next/image'
 import { BackToRecipes } from '@/components/back-to-recipes'
+import { getRecipeById } from '@/lib/supabase/recipes'
 
 interface RecipePageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 async function RecipePage({ params }: RecipePageProps) {
-  const supabase = await createClient()
-  const id = await params.id
-  const { data, error: fetchError } = await supabase
-    .from('recipes')
-    .select('*')
-    .eq('id', id)
+  const { id } = await params
+  const recipe = await getRecipeById(id)
 
-  if (!data || fetchError) {
+  if (!recipe) {
     return (
       <div className="text-center">
         <p>Recipe not found</p>
@@ -30,8 +23,6 @@ async function RecipePage({ params }: RecipePageProps) {
       </div>
     )
   }
-
-  const recipe = data[0] as RecipeType
 
   return (
     <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-2 md:py-8">
@@ -49,6 +40,7 @@ async function RecipePage({ params }: RecipePageProps) {
             height={500}
             className="w-full h-auto object-cover rounded-xl shadow-lg"
             src={recipe.image_url || '/Gemini_Food.png'}
+            priority
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
@@ -58,7 +50,7 @@ async function RecipePage({ params }: RecipePageProps) {
             </h3>
             <ul className="space-y-3 text-base text-black/80 dark:text-white/80">
               {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient.name}</li>
+                <li key={index}>{ingredient}</li>
               ))}
             </ul>
           </div>

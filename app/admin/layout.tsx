@@ -8,16 +8,16 @@ export default async function AdminLayout({
 }) {
   const supabase = await createClient()
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
   // If not logged in, redirect to login page
-  if (!session) {
-    redirect('/admin/login')
+  if (!user) {
+    redirect('/login')
   }
 
   // If not admin, show unauthorized
-  if (session.user.email !== 'admin@example.com') {
+  if (user?.email !== 'admin@example.com') {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">

@@ -1,17 +1,18 @@
-import { MenuItem } from './menu-item'
+import RecipeGrid from '@/components/ui/recipes/recipe-grid'
+import { RecipeType } from '@/types/database.types'
 
-interface MenuItemData {
-  name: string
-  description: string
-  price: string
-}
+// interface MenuItemData {
+//   name: string
+//   description: string
+//   price: string
+// }
 
 interface MenuCategoryProps {
   title: string
-  items: MenuItemData[]
+  recipes: RecipeType[]
 }
 
-export function MenuCategory({ title, items }: MenuCategoryProps) {
+export function MenuCategory({ title, recipes }: MenuCategoryProps) {
   return (
     <section className="mb-16">
       <div className="mb-8">
@@ -22,9 +23,7 @@ export function MenuCategory({ title, items }: MenuCategoryProps) {
       </div>
 
       <div className="grid md:grid-cols-2 gap-x-12 gap-y-8">
-        {items.map((item, index) => (
-          <MenuItem key={index} item={item} />
-        ))}
+        <RecipeGrid recipes={recipes} />
       </div>
     </section>
   )

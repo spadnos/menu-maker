@@ -9,22 +9,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { NewRecipeForm } from '@/components/new-recipe-form'
+import { RecipeForm } from '@/components/recipe-form'
 
 export function AddRecipeButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-lg">
+        <Button className="rounded-full shadow-lg">
           <Plus className="h-6 w-6" />
-          <span className="sr-only">Add new recipe</span>
+          <span className="">Create new recipe</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto"
+        aria-describedby="recipe-form"
+      >
         <DialogHeader>
-          <DialogTitle>Add New Recipe</DialogTitle>
+          <DialogTitle>Create New Recipe</DialogTitle>
         </DialogHeader>
-        <NewRecipeForm />
+        <RecipeForm />
       </DialogContent>
     </Dialog>
   )

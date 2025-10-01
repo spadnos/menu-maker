@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+// import { ArrowRight } from 'lucide-react'
 import type { MenuItemFull } from '@/lib/supabase/types'
 
 interface MenuItemProps {
