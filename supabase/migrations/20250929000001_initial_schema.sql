@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Categories table
 CREATE TABLE categories (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(100) NOT NULL,
   display_order INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -14,7 +14,7 @@ CREATE INDEX categories_display_order_idx ON categories (display_order);
 
 -- Menu items table
 CREATE TABLE menu_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(200) NOT NULL,
   description TEXT NOT NULL,
   category_id UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
@@ -31,7 +31,7 @@ CREATE INDEX menu_items_created_at_idx ON menu_items (created_at DESC);
 
 -- Recipes table
 CREATE TABLE recipes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   menu_item_id UUID NOT NULL UNIQUE REFERENCES menu_items(id) ON DELETE CASCADE,
   ingredients JSONB NOT NULL,
   instructions TEXT[] NOT NULL,

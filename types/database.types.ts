@@ -23,18 +23,19 @@ export type RecipeType = {
   name: string
   description: string
   image_url: string | null
-  ingredients: string[]
+  ingredients: string[] | IngredientType[]
   instructions: string[]
   prep_time_mins: number
   cook_time_mins: number
   servings: number
   created_at: string
   updated_at: string
+  created_by: string
 }
 
 export type RecipeCreateType = Omit<
   RecipeType,
-  'id' | 'created_at' | 'updated_at'
+  'id' | 'created_at' | 'updated_at' | 'created_by'
 >
 
 export type IngredientType = {

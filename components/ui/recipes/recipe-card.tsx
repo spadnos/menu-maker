@@ -22,7 +22,7 @@ function RecipeCard({ recipe }: RecipeCardProps) {
           {recipe.name}
         </h3>
         <p className="mt-1 text-sm text-subtle-light dark:text-subtle-dark">
-          {recipe.prep_time_mins && `${recipe.prep_time_mins} minutes`}
+          {recipe.prep_time_mins > 0 && `${recipe.prep_time_mins} minutes`}
         </p>
       </div>
     </a>

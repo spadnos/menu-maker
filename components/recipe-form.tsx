@@ -14,10 +14,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { createRecipe } from '@/lib/supabase/recipes'
-// import { RecipeCreateType } from '@/types/database.types'
 
-export function RecipeForm() {
+type NewRecipeProps = {
+  name: string
+  description: string
+  ingredients: string
+  instructions: string
+  image_url: string | null
+  prep_time_mins: number
+  cook_time_mins: number
+  servings: number
+}
+
+export function RecipeForm({
+  onSubmit,
+}: {
+  onSubmit: (e: React.FormEvent, recipe: NewRecipeProps) => void
+}) {
   const [recipe, setRecipe] = useState({
     name: '',
     description: '',
@@ -51,25 +64,31 @@ export function RecipeForm() {
     }))
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const cleanedRecipe = {
-      name: recipe.name,
-      description: recipe.description,
-      ingredients: recipe.ingredients.split('\n'),
-      instructions: recipe.instructions.split('\n'),
-      image_url: null,
-      prep_time_mins: 0,
-      cook_time_mins: 0,
-      servings: 0,
-    }
-    await createRecipe(cleanedRecipe)
-    console.log('Recipe submitted:', cleanedRecipe)
-    alert('Recipe submitted! Check the console for details.')
-  }
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   const cleanedRecipe = {
+  //     name: recipe.name,
+  //     description: recipe.description,
+  //     ingredients: recipe.ingredients
+  //       .split('\n')
+  //       .filter((ingredient) => ingredient !== ''),
+  //     instructions: recipe.instructions
+  //       .split('\n')
+  //       .filter((instruction) => instruction !== ''),
+  //     image_url: null,
+  //     prep_time_mins: 0,
+  //     cook_time_mins: 0,
+  //     servings: 0,
+  //   }
+  //   await createRecipe(cleanedRecipe)
+  //   // console.log('Recipe submitted:', cleanedRecipe)
+
+  //   toast.success('Recipe submitted! Check the console for details.')
+  //   router.push('/recipes')
+  // }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+    <form onSubmit={(e) => onSubmit(e, recipe)} className="max-w-3xl mx-auto">
       <Card>
         <CardHeader>
           <CardTitle className="font-serif text-3xl text-primary">

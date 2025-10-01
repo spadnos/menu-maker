@@ -1,8 +1,9 @@
 'use client'
 
 import { signout } from './actions'
+import { Button } from '@/components/ui/button'
 
 function SignoutButton() {
-  return <button onClick={signout}>Sign out</button>
+  return <Button onClick={signout}>Sign out</Button>
 }
 export default SignoutButton

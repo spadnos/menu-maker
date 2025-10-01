@@ -3,6 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import type { RecipeCreateType, RecipeType } from '@/types/database.types'
 import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
 
 export const createRecipe = async (recipe: RecipeCreateType) => {
   const supabase = await createClient()
@@ -27,6 +28,8 @@ export const createRecipe = async (recipe: RecipeCreateType) => {
     updated_at: z.string().optional(),
   })
 
+  // console.log('createRecipe:recipe', recipe)
+
   const isValidRecipe = recipeValidationSchema.safeParse(recipe)
   if (!isValidRecipe.success) {
     const error = new Error(`Invalid recipe: ${isValidRecipe.error.message}`)
@@ -35,7 +38,6 @@ export const createRecipe = async (recipe: RecipeCreateType) => {
   }
 
   try {
-    console.log('createRecipe:recipe', recipe)
     const { data, error } = await supabase.from('recipes').insert(recipe)
 
     if (error) throw error
@@ -76,6 +78,24 @@ export const getRecipeById = async (id: string) => {
     return data?.[0] as RecipeType
   } catch (error) {
     console.error('Error fetching recipe by ID:', error)
+    throw error
+  }
+}
+
+export const deleteRecipe = async (id: string) => {
+  console.log('deleteRecipe:id', id)
+
+  const supabase = await createClient()
+
+  try {
+    const { data, error } = await supabase.from('recipes').delete().eq('id', id)
+    console.log('deleteRecipe:data', data, error)
+    if (error) throw error
+
+    revalidatePath('/recipes')
+    return data
+  } catch (error) {
+    console.error('Error deleting recipe:', error)
     throw error
   }
 }
