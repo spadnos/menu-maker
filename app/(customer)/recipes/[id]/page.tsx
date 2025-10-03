@@ -22,7 +22,7 @@ async function RecipePage({ params }: RecipePageProps) {
     return (
       <div className="text-center">
         <p>Recipe not found</p>
-        <Link href="/recipes">
+        <Link href="/">
           <span className="text-primary/80 hover:text-primary">
             Return to recipe catalog
           </span>
@@ -40,16 +40,21 @@ async function RecipePage({ params }: RecipePageProps) {
             {recipe.name}
           </h2>
         </div>
-        <div className="mb-12 flex justify-center">
-          <Image
-            alt={recipe.name}
-            width={240}
-            height={240}
-            className="w-60 h-auto object-cover rounded-xl shadow-lg"
-            src={recipe.image_url || '/Gemini_Food.png'}
-            priority
-          />
-        </div>
+        {recipe.image_url && (
+          <div className="mb-12 flex justify-between">
+            <Image
+              alt={recipe.name}
+              width={240}
+              height={240}
+              className="w-60 h-auto object-cover rounded-xl shadow-lg"
+              src={recipe.image_url || '/Gemini_Food.png'}
+              priority
+            />
+            <div>
+              <p>{recipe.description}</p>
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
           <div className="md:col-span-1 bg-background-light/50 dark:bg-background-dark/50 p-6 rounded-lg border border-primary/10">
             <h3 className="text-2xl font-bold mb-4 border-b border-primary/20 pb-2 text-black dark:text-white">
@@ -98,7 +103,7 @@ async function RecipePage({ params }: RecipePageProps) {
             {recipe.created_by === user?.id && (
               <div className="flex space-x-4 mt-4">
                 <RecipeDeleteButton id={recipe.id} />
-                <RecipeEditButton id={recipe.id} />
+                <RecipeEditButton recipe={recipe} />
               </div>
             )}
           </div>

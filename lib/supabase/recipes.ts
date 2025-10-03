@@ -60,7 +60,7 @@ export const getRecipes = async () => {
     return data
   } catch (error) {
     console.error('Error fetching recipes:', error)
-    throw error
+    return []
   }
 }
 
@@ -76,26 +76,48 @@ export const getRecipeById = async (id: string) => {
     if (error) throw error
 
     return data?.[0] as RecipeType
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error('Error fetching recipe by ID:', error)
-    throw error
+    // console.error('Error fetching recipe by ID:', error)
+    return null
   }
 }
 
 export const deleteRecipe = async (id: string) => {
-  console.log('deleteRecipe:id', id)
+  // console.log('deleteRecipe:id', id)
 
   const supabase = await createClient()
 
   try {
     const { data, error } = await supabase.from('recipes').delete().eq('id', id)
-    console.log('deleteRecipe:data', data, error)
+    // console.log('deleteRecipe:data', data, error)
     if (error) throw error
 
-    revalidatePath('/recipes')
+    revalidatePath('/')
     return data
   } catch (error) {
     console.error('Error deleting recipe:', error)
+    throw error
+  }
+}
+
+export const updateRecipe = async (recipe: Partial<RecipeType>) => {
+  // console.log('updateRecipe:recipe', recipe)
+
+  const supabase = await createClient()
+
+  try {
+    const { data, error } = await supabase
+      .from('recipes')
+      .update(recipe)
+      .eq('id', recipe.id)
+    // console.log('updateRecipe:data', data, error)
+    if (error) throw error
+
+    revalidatePath('/')
+    return data
+  } catch (error) {
+    console.error('Error updating recipe:', error)
     throw error
   }
 }

@@ -11,6 +11,13 @@ function RecipeDeleteButton({ id }: { id: string }) {
     router.push('/recipes')
   }
 
-  return <Button onClick={handleClick}>Delete Recipe</Button>
+  return (
+    <Button
+      className="destructive rounded-full shadow-lg"
+      onClick={handleClick}
+    >
+      Delete Recipe
+    </Button>
+  )
 }
 export default RecipeDeleteButton

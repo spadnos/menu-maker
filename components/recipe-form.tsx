@@ -2,7 +2,7 @@
 
 import type React from 'react'
 
-import { useState } from 'react'
+import { useState, useRef, ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,6 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { RecipeType } from '@/types/database.types'
+import Image from 'next/image'
 
 type NewRecipeProps = {
   name: string
@@ -26,76 +28,114 @@ type NewRecipeProps = {
   servings: number
 }
 
-export function RecipeForm({
-  onSubmit,
-}: {
+interface RecipeFormProps {
   onSubmit: (e: React.FormEvent, recipe: NewRecipeProps) => void
-}) {
-  const [recipe, setRecipe] = useState({
-    name: '',
-    description: '',
-    ingredients: '',
-    instructions: '',
-    image_url: null,
-    prep_time_mins: 0,
-    cook_time_mins: 0,
-    servings: 0,
+  recipe?: RecipeType
+}
+
+export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
+  const [updatedRecipe, setUpdatedRecipe] = useState({
+    id: recipe?.id || null,
+    name: recipe?.name || '',
+    description: recipe?.description || '',
+    ingredients: recipe?.ingredients.join('\n') || '',
+    instructions: recipe?.instructions.join('\n') || '',
+    image_url: recipe?.image_url || null,
+    prep_time_mins: recipe?.prep_time_mins || 0,
+    cook_time_mins: recipe?.cook_time_mins || 0,
+    servings: recipe?.servings || 0,
   })
+  const [isUploading, setIsUploading] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    recipe?.image_url || null
+  )
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file')
+      return
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB')
+      return
+    }
+
+    try {
+      setIsUploading(true)
+
+      // In a real app, you would upload the file to a storage service here
+      // For now, we'll just create a local URL for preview
+      const fileUrl = URL.createObjectURL(file)
+      setPreviewUrl(fileUrl)
+
+      // Update the form with the file (in a real app, you'd get the URL from your storage service)
+      setUpdatedRecipe((prev) => ({
+        ...prev,
+        image_url: fileUrl, // In a real app, this would be the URL from your storage service
+      }))
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('Error uploading image. Please try again.')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const removeImage = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl)
+    }
+    setPreviewUrl(null)
+    setUpdatedRecipe((prev) => ({
+      ...prev,
+      image_url: null,
+    }))
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
 
   const handleNameChange = (value: string) => {
-    setRecipe((prev) => ({ ...prev, name: value }))
+    setUpdatedRecipe((prev) => ({ ...prev, name: value }))
   }
 
   const handleDescriptionChange = (value: string) => {
-    setRecipe((prev) => ({ ...prev, description: value }))
+    setUpdatedRecipe((prev) => ({ ...prev, description: value }))
   }
 
   const handleIngredientsChange = (value: string) => {
-    setRecipe((prev) => ({
+    setUpdatedRecipe((prev) => ({
       ...prev,
       ingredients: value,
     }))
   }
 
   const handleInstructionsChange = (value: string) => {
-    setRecipe((prev) => ({
+    setUpdatedRecipe((prev) => ({
       ...prev,
       instructions: value,
     }))
   }
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   const cleanedRecipe = {
-  //     name: recipe.name,
-  //     description: recipe.description,
-  //     ingredients: recipe.ingredients
-  //       .split('\n')
-  //       .filter((ingredient) => ingredient !== ''),
-  //     instructions: recipe.instructions
-  //       .split('\n')
-  //       .filter((instruction) => instruction !== ''),
-  //     image_url: null,
-  //     prep_time_mins: 0,
-  //     cook_time_mins: 0,
-  //     servings: 0,
-  //   }
-  //   await createRecipe(cleanedRecipe)
-  //   // console.log('Recipe submitted:', cleanedRecipe)
-
-  //   toast.success('Recipe submitted! Check the console for details.')
-  //   router.push('/recipes')
-  // }
-
   return (
-    <form onSubmit={(e) => onSubmit(e, recipe)} className="max-w-3xl mx-auto">
+    <form
+      onSubmit={(e) => onSubmit(e, updatedRecipe)}
+      className="max-w-3xl mx-auto"
+    >
       <Card>
         <CardHeader>
           <CardTitle className="font-serif text-3xl text-primary">
-            Add New Recipe
+            {recipe ? 'Edit Recipe' : 'Add New Recipe'}
           </CardTitle>
           <CardDescription>
-            Create a new recipe with ingredients and instructions
+            Create or edit a recipe with ingredients and instructions
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -106,12 +146,90 @@ export function RecipeForm({
             </Label>
             <Input
               id="name"
-              value={recipe.name}
+              value={updatedRecipe.name}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="e.g., Classic Margherita Pizza"
               required
               className="text-base"
             />
+          </div>
+
+          {/* Recipe Image Upload */}
+          <div className="space-y-2">
+            <Label htmlFor="image" className="text-base font-medium">
+              Recipe Image
+            </Label>
+            <div className="flex items-center gap-4">
+              {previewUrl ? (
+                <div className="relative group">
+                  <div className="relative w-32 h-32 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
+                    <Image
+                      alt={updatedRecipe.name}
+                      width={80}
+                      height={80}
+                      src={previewUrl}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    disabled={isUploading}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <div className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md flex items-center justify-center">
+                  <span className="text-gray-400 text-sm text-center px-2">
+                    No image selected
+                  </span>
+                </div>
+              )}
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? 'Uploading...' : 'Choose Image'}
+                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    id="image"
+                    name="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    disabled={isUploading}
+                  />
+                  {isUploading && (
+                    <span className="text-sm text-muted-foreground">
+                      Uploading...
+                    </span>
+                  )}
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  JPG, PNG up to 5MB
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Recipe Description */}
@@ -121,7 +239,7 @@ export function RecipeForm({
             </Label>
             <Textarea
               id="description"
-              value={recipe.description}
+              value={updatedRecipe.description}
               onChange={(e) => handleDescriptionChange(e.target.value)}
               placeholder="Describe your recipe..."
               rows={4}
@@ -138,7 +256,7 @@ export function RecipeForm({
             </p>
             <Textarea
               id="ingredients"
-              value={recipe.ingredients}
+              value={updatedRecipe.ingredients}
               onChange={(e) => handleIngredientsChange(e.target.value)}
               placeholder="2 cups all-purpose flour&#10;1 cup sugar&#10;3 eggs&#10;1 tsp vanilla extract"
               rows={8}
@@ -156,7 +274,7 @@ export function RecipeForm({
             </p>
             <Textarea
               id="instructions"
-              value={recipe.instructions}
+              value={updatedRecipe.instructions}
               onChange={(e) => handleInstructionsChange(e.target.value)}
               placeholder="Preheat oven to 350°FM\nMix dry ingredients in a bowl\nAdd wet ingredients and stir until combined\nPour into greased pan and bake for 30 minutes"
               rows={10}

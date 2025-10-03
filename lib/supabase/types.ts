@@ -158,8 +158,11 @@ export type MenuItemWithRecipe = MenuItem & {
 }
 
 export type MenuItemFull = MenuItem & {
-  category: Category
+  name: string
+  display_order: number
+  description: string
   recipe: Recipe | null
+  price: string
 }
 
 export type RecipeWithMenuItem = Recipe & {

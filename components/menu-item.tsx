@@ -6,7 +6,7 @@ interface MenuItemProps {
   item: MenuItemFull
 }
 
-export function MenuItem({ item }: MenuItemProps) {
+export default function MenuItem({ item }: MenuItemProps) {
   return (
     <div className="flex justify-between gap-4 group">
       <div className="flex-1">

@@ -30,7 +30,7 @@ export default function GlobalNotFound() {
                 View Menu
               </span>
             </Link>
-            <Link href="/recipes">
+            <Link href="/">
               <span className="text-primary/80 hover:text-primary">
                 View Recipe Catalog
               </span>

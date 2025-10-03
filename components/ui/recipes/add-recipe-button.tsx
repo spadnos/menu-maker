@@ -15,17 +15,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 // import { RecipeCreateType } from '@/types/database.types'
-
-type NewRecipeProps = {
-  name: string
-  description: string
-  ingredients: string
-  instructions: string
-  image_url: string | null
-  prep_time_mins: number
-  cook_time_mins: number
-  servings: number
-}
+import { NewRecipeProps } from '@/types/database.types'
 
 export function AddRecipeButton() {
   const router = useRouter()
@@ -52,7 +42,7 @@ export function AddRecipeButton() {
 
     setOpen(false)
     toast.success('Recipe created successfully')
-    router.push('/recipes')
+    router.push('/')
   }
 
   return (

@@ -33,6 +33,18 @@ export type RecipeType = {
   created_by: string
 }
 
+export type NewRecipeProps = {
+  id?: string
+  name: string
+  description: string
+  ingredients: string
+  instructions: string
+  image_url: string | null
+  prep_time_mins: number
+  cook_time_mins: number
+  servings: number
+}
+
 export type RecipeCreateType = Omit<
   RecipeType,
   'id' | 'created_at' | 'updated_at' | 'created_by'
