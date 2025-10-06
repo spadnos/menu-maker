@@ -1,22 +1,26 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Menu } from 'lucide-react'
-import { useState } from 'react'
-import { AddRecipeButton } from '@/components/ui/recipes/add-recipe-button'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Menu } from 'lucide-react';
+import { useState } from 'react';
+// import { AddRecipeButton } from '@/components/ui/recipes/add-recipe-button';
+import UserDropdown from '@/components/user-dropdown';
+import { useUser } from '@/lib/hooks/get-user';
 
 export function Navbar() {
-  const pathname = usePathname()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useUser();
 
   const navigation = [
     { name: 'Recipes', href: '/' },
     { name: 'Menus', href: '/menus' },
     { name: 'Collections', href: '/collections' },
-  ]
+    { name: 'About', href: '/about' },
+  ];
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -48,8 +52,6 @@ export function Navbar() {
             </div>
           </div>
 
-          <AddRecipeButton />
-
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <Button
@@ -62,6 +64,8 @@ export function Navbar() {
               <span className="sr-only">Open main menu</span>
             </Button>
           </div>
+          {user && <UserDropdown />}
+          {!user && <Link href="/login">Login</Link>}
         </div>
 
         {/* Mobile menu, show/hide based on menu state */}
@@ -85,19 +89,11 @@ export function Navbar() {
               ))}
             </div>
             <div className="border-t border-gray-200 pb-3 pt-4">
-              <div className="flex items-center px-4">
-                <Link
-                  href="/reservations"
-                  className="w-full rounded-md border border-transparent bg-primary px-4 py-2 text-center text-sm font-medium text-white hover:bg-primary/90"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Make a Reservation
-                </Link>
-              </div>
+              <div className="flex items-center px-4"></div>
             </div>
           </div>
         )}
       </nav>
     </header>
-  )
+  );
 }

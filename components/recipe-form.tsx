@@ -1,36 +1,36 @@
-'use client'
+'use client';
 
-import type React from 'react'
+import type React from 'react';
 
-import { useState, useRef, ChangeEvent } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import { useState, useRef, ChangeEvent } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { RecipeType } from '@/types/database.types'
-import Image from 'next/image'
+} from '@/components/ui/card';
+import { RecipeType } from '@/types/database.types';
+import Image from 'next/image';
 
 type NewRecipeProps = {
-  name: string
-  description: string
-  ingredients: string
-  instructions: string
-  image_url: string | null
-  prep_time_mins: number
-  cook_time_mins: number
-  servings: number
-}
+  name: string;
+  description: string;
+  ingredients: string;
+  instructions: string;
+  image_url: string | null;
+  prep_time_mins: number;
+  cook_time_mins: number;
+  servings: number;
+};
 
 interface RecipeFormProps {
-  onSubmit: (e: React.FormEvent, recipe: NewRecipeProps) => void
-  recipe?: RecipeType
+  onSubmit: (e: React.FormEvent, recipe: NewRecipeProps) => void;
+  recipe?: RecipeType;
 }
 
 export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
@@ -44,85 +44,85 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
     prep_time_mins: recipe?.prep_time_mins || 0,
     cook_time_mins: recipe?.cook_time_mins || 0,
     servings: recipe?.servings || 0,
-  })
-  const [isUploading, setIsUploading] = useState(false)
+  });
+  const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     recipe?.image_url || null
-  )
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
     // Check if file is an image
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file')
-      return
+      alert('Please upload an image file');
+      return;
     }
 
     // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB')
-      return
+      alert('Image size should be less than 5MB');
+      return;
     }
 
     try {
-      setIsUploading(true)
+      setIsUploading(true);
 
       // In a real app, you would upload the file to a storage service here
       // For now, we'll just create a local URL for preview
-      const fileUrl = URL.createObjectURL(file)
-      setPreviewUrl(fileUrl)
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewUrl(fileUrl);
 
       // Update the form with the file (in a real app, you'd get the URL from your storage service)
       setUpdatedRecipe((prev) => ({
         ...prev,
         image_url: fileUrl, // In a real app, this would be the URL from your storage service
-      }))
+      }));
     } catch (error) {
-      console.error('Error uploading image:', error)
-      alert('Error uploading image. Please try again.')
+      console.error('Error uploading image:', error);
+      alert('Error uploading image. Please try again.');
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
     }
-  }
+  };
 
   const removeImage = () => {
     if (previewUrl) {
-      URL.revokeObjectURL(previewUrl)
+      URL.revokeObjectURL(previewUrl);
     }
-    setPreviewUrl(null)
+    setPreviewUrl(null);
     setUpdatedRecipe((prev) => ({
       ...prev,
       image_url: null,
-    }))
+    }));
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = '';
     }
-  }
+  };
 
   const handleNameChange = (value: string) => {
-    setUpdatedRecipe((prev) => ({ ...prev, name: value }))
-  }
+    setUpdatedRecipe((prev) => ({ ...prev, name: value }));
+  };
 
   const handleDescriptionChange = (value: string) => {
-    setUpdatedRecipe((prev) => ({ ...prev, description: value }))
-  }
+    setUpdatedRecipe((prev) => ({ ...prev, description: value }));
+  };
 
   const handleIngredientsChange = (value: string) => {
     setUpdatedRecipe((prev) => ({
       ...prev,
       ingredients: value,
-    }))
-  }
+    }));
+  };
 
   const handleInstructionsChange = (value: string) => {
     setUpdatedRecipe((prev) => ({
       ...prev,
       instructions: value,
-    }))
-  }
+    }));
+  };
 
   return (
     <form
@@ -258,7 +258,12 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
               id="ingredients"
               value={updatedRecipe.ingredients}
               onChange={(e) => handleIngredientsChange(e.target.value)}
-              placeholder="2 cups all-purpose flour&#10;1 cup sugar&#10;3 eggs&#10;1 tsp vanilla extract"
+              placeholder={[
+                '2 cups all-purpose flour',
+                '1 cup sugar',
+                '3 eggs',
+                '...',
+              ].join('\n')}
               rows={8}
               required
               className="text-base font-mono"
@@ -276,7 +281,11 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
               id="instructions"
               value={updatedRecipe.instructions}
               onChange={(e) => handleInstructionsChange(e.target.value)}
-              placeholder="Preheat oven to 350°FM\nMix dry ingredients in a bowl\nAdd wet ingredients and stir until combined\nPour into greased pan and bake for 30 minutes"
+              placeholder={[
+                'Preheat oven to 350°FM\nMix dry ingredients in a bowl',
+                'Add wet ingredients and stir until combined',
+                '...',
+              ].join('\n')}
               rows={10}
               required
               className="text-base font-mono"
@@ -292,5 +301,5 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
         </CardContent>
       </Card>
     </form>
-  )
+  );
 }

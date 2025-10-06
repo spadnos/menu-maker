@@ -1,10 +1,10 @@
-import { login, signup } from './actions'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { login, signup } from './actions';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export default function LoginPage() {
   return (
-    <div className="flex justify-center">
+    <div className="mt-8 flex justify-center">
       <form className="flex flex-col gap-4 max-w-sm mx-auto">
         <Input
           id="email"
@@ -26,5 +26,5 @@ export default function LoginPage() {
         </div>
       </form>
     </div>
-  )
+  );
 }
