@@ -7,6 +7,13 @@ const Motivations = [
     ],
   },
   {
+    title: 'Any user can create recipes',
+    content: [
+      'Most sites are maintained by a single person or a small group of people. I want to allow any user to create recipes.',
+      'I want to allow any user to create recipes.',
+    ],
+  },
+  {
     title: 'Collect all my recipes in one place',
     content: [
       `There are 1000s of recipe sites. Each one allows you to create a recipe box,
@@ -18,13 +25,6 @@ const Motivations = [
     title: 'Avoid all the advertising, popups, and other distractions',
     content: [
       'Many websites have good recipes, but you have to get through advertising, popups, and other distractions to get to the recipe. Often the sites are practically unusable. I have frequenntly given up on the recipe because getting to the recipe was too much of a hassle.',
-    ],
-  },
-  {
-    title: 'Any user can create recipes',
-    content: [
-      'Most sites are maintained by a single person or a small group of people. I want to allow any user to create recipes.',
-      'I want to allow any user to create recipes.',
     ],
   },
   {
