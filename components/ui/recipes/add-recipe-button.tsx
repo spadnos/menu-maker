@@ -32,10 +32,11 @@ export function AddRecipeButton() {
       instructions: recipe.instructions
         .split('\n')
         .filter((instruction) => instruction !== ''),
-      image_url: null,
-      prep_time_mins: 0,
-      cook_time_mins: 0,
-      servings: 0,
+      image_url: recipe.image_url,
+      prep_time_mins: recipe.prep_time_mins || 0,
+      cook_time_mins: recipe.cook_time_mins || 0,
+      servings: recipe.servings || 0,
+      source_url: recipe.source_url || null,
     };
     await createRecipe(cleanedRecipe);
     // console.log('Recipe submitted:', cleanedRecipe)
@@ -58,7 +59,7 @@ export function AddRecipeButton() {
         aria-describedby="recipe-form"
       >
         <DialogHeader>
-          <DialogTitle>Create New Recipe</DialogTitle>
+          <DialogTitle className="text-primary">Create New Recipe</DialogTitle>
         </DialogHeader>
         <RecipeForm onSubmit={handleSubmit} />
       </DialogContent>

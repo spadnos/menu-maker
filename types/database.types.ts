@@ -18,16 +18,28 @@ export type CategoryType = {
   updated_at: string;
 };
 
+export type IngredientType = {
+  id: string;
+  recipe_id: string;
+  name: string;
+  amount: number;
+  unit: string;
+  order: number;
+};
+
+export type IngredientCreateType = Omit<IngredientType, 'id' | 'recipe_id'>;
+
 export type RecipeType = {
   id: string;
   name: string;
   description: string;
   image_url: string | null;
-  ingredients: string[] | IngredientType[];
+  ingredients: string[] | IngredientType[] | IngredientCreateType[];
   instructions: string[];
   prep_time_mins: number;
   cook_time_mins: number;
   servings: number;
+  source_url: string | null;
   created_at: string;
   updated_at: string;
   created_by: string;
@@ -43,21 +55,13 @@ export type NewRecipeProps = {
   prep_time_mins: number;
   cook_time_mins: number;
   servings: number;
+  source_url?: string | null;
 };
 
 export type RecipeCreateType = Omit<
   RecipeType,
   'id' | 'created_at' | 'updated_at' | 'created_by'
 >;
-
-export type IngredientType = {
-  id: string;
-  recipe_id: string;
-  name: string;
-  amount: number;
-  unit: string;
-  order: number;
-};
 
 export type InstructionType = {
   id: string;
