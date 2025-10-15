@@ -1,27 +1,27 @@
-import { NextResponse } from 'next/server'
-import { ApiError } from './api-utils'
+import { NextResponse } from 'next/server';
+import { ApiError } from './api-utils';
 
 type SuccessResponse<T> = {
-  success: true
-  data: T
-}
+  success: true;
+  data: T;
+};
 
 type ErrorResponse = {
-  success: false
+  success: false;
   error: {
-    message: string
-    code?: string
-    details?: Record<string, unknown>
-  }
-}
+    message: string;
+    code?: string;
+    details?: Record<string, unknown>;
+  };
+};
 
-export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse
+export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
 
 export function createSuccessResponse<T>(data: T): ApiResponse<T> {
   return {
     success: true,
     data,
-  }
+  };
 }
 
 export function createErrorResponse(
@@ -36,7 +36,7 @@ export function createErrorResponse(
       ...(code && { code }),
       ...(details && { details }),
     },
-  }
+  };
 }
 
 export function createApiResponse<T>(
@@ -48,22 +48,22 @@ export function createApiResponse<T>(
       error.message,
       error instanceof ApiError ? error.statusCode.toString() : '500',
       error instanceof ApiError ? error.errors : undefined
-    )
+    );
   }
 
   if (data === null) {
-    return createErrorResponse('Resource not found', '404')
+    return createErrorResponse('Resource not found', '404');
   }
 
-  return createSuccessResponse(data)
+  return createSuccessResponse(data);
 }
 
 export function toNextResponse<T>(response: ApiResponse<T>, status = 200) {
-  return NextResponse.json(response, { status })
+  return NextResponse.json(response, { status });
 }
 
 export function handleApiError(error: unknown) {
-  console.error('API Error:', error)
+  console.error('API Error:', error);
 
   if (error instanceof ApiError) {
     return toNextResponse(
@@ -73,11 +73,11 @@ export function handleApiError(error: unknown) {
         error.errors
       ),
       error.statusCode
-    )
+    );
   }
 
   const errorMessage =
-    error instanceof Error ? error.message : 'An unknown error occurred'
+    error instanceof Error ? error.message : 'An unknown error occurred';
   return toNextResponse(
     createErrorResponse(
       errorMessage,
@@ -87,5 +87,5 @@ export function handleApiError(error: unknown) {
         : undefined
     ),
     500
-  )
+  );
 }

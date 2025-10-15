@@ -1,5 +1,5 @@
-import { RecipeType } from '@/types/database.types'
-import RecipeCard from './recipe-card'
+import { RecipeType } from '@/types/database.types';
+import RecipeCard from './recipe-card';
 
 function RecipeGrid({ recipes }: { recipes: RecipeType[] }) {
   return (
@@ -8,6 +8,6 @@ function RecipeGrid({ recipes }: { recipes: RecipeType[] }) {
         <RecipeCard key={recipe.id} recipe={recipe} />
       ))}
     </div>
-  )
+  );
 }
-export default RecipeGrid
+export default RecipeGrid;

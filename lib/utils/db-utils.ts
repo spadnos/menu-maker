@@ -1,10 +1,10 @@
-import { createClient } from '@/utils/supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 type QueryResult<T> = {
-  data: T | null
-  error: Error | null
-}
+  data: T | null;
+  error: Error | null;
+};
 
 /**
  * Execute a database query with error handling
@@ -13,36 +13,36 @@ type QueryResult<T> = {
  */
 export async function executeQuery<T>(
   queryFn: (supabase: SupabaseClient) => Promise<{
-    data: T | null
-    error: unknown
+    data: T | null;
+    error: unknown;
   }>
 ): Promise<QueryResult<T>> {
   try {
-    const supabase = await createClient()
-    const { data, error } = await queryFn(supabase)
+    const supabase = await createClient();
+    const { data, error } = await queryFn(supabase);
 
     if (error) {
-      console.error('Database error:', error)
+      console.error('Database error:', error);
       const errorMessage =
         error && typeof error === 'object' && 'message' in error
           ? String(error.message)
-          : 'Database error'
+          : 'Database error';
       return {
         data: null,
         error: new Error(errorMessage),
-      }
+      };
     }
 
-    return { data, error: null }
+    return { data, error: null };
   } catch (error) {
-    console.error('Unexpected error in executeQuery:', error)
+    console.error('Unexpected error in executeQuery:', error);
     return {
       data: null,
       error:
         error instanceof Error
           ? error
           : new Error('An unexpected error occurred'),
-    }
+    };
   }
 }
 
@@ -61,10 +61,10 @@ export async function getById<T>(
       .from(table)
       .select('*')
       .eq('id', id)
-      .single()
+      .single();
 
-    return { data, error }
-  })
+    return { data, error };
+  });
 }
 
 /**
@@ -76,39 +76,39 @@ export async function getById<T>(
 export async function getAll<T>(
   table: string,
   options: {
-    columns?: string
-    orderBy?: { column: string; ascending?: boolean }
-    limit?: number
-    eq?: { column: string; value: unknown }
+    columns?: string;
+    orderBy?: { column: string; ascending?: boolean };
+    limit?: number;
+    eq?: { column: string; value: unknown };
   } = {}
 ): Promise<QueryResult<T[]>> {
   return executeQuery<T[]>(async (supabase) => {
-    let query = supabase.from(table).select(options.columns || '*')
+    let query = supabase.from(table).select(options.columns || '*');
 
     if (options.orderBy) {
       query = query.order(options.orderBy.column, {
         ascending: options.orderBy.ascending ?? true,
-      })
+      });
     }
 
     if (options.limit) {
-      query = query.limit(options.limit)
+      query = query.limit(options.limit);
     }
 
     if (options.eq) {
-      query = query.eq(options.eq.column, options.eq.value)
+      query = query.eq(options.eq.column, options.eq.value);
     }
 
     const { data: result, error } = (await query) as unknown as {
-      data: T[] | null
-      error: unknown
-    }
+      data: T[] | null;
+      error: unknown;
+    };
 
     return {
       data: result || [],
       error,
-    }
-  })
+    };
+  });
 }
 
 /**
@@ -126,10 +126,10 @@ export async function insert<T>(
       .from(table)
       .insert(data)
       .select()
-      .single()
+      .single();
 
-    return { data: result, error }
-  })
+    return { data: result, error };
+  });
 }
 
 /**
@@ -150,10 +150,10 @@ export async function update<T>(
       .update({ ...data, updated_at: new Date().toISOString() })
       .eq('id', id)
       .select()
-      .single()
+      .single();
 
-    return { data: result, error }
-  })
+    return { data: result, error };
+  });
 }
 
 /**
@@ -167,11 +167,11 @@ export async function remove(
   id: string
 ): Promise<QueryResult<boolean>> {
   return executeQuery<boolean>(async (supabase) => {
-    const { error } = await supabase.from(table).delete().eq('id', id)
+    const { error } = await supabase.from(table).delete().eq('id', id);
 
     return {
       data: !error,
       error: error || null,
-    }
-  })
+    };
+  });
 }

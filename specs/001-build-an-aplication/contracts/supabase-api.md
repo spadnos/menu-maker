@@ -32,7 +32,7 @@ supabase
   `
   )
   .order('category.display_order', { ascending: true })
-  .order('name', { ascending: true })
+  .order('name', { ascending: true });
 ```
 
 **Response Success (200)**:
@@ -94,7 +94,7 @@ supabase
   `
   )
   .or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`)
-  .limit(50)
+  .limit(50);
 ```
 
 **Parameters**:
@@ -136,7 +136,7 @@ supabase
   `
   )
   .contains('ingredients', [{ name: searchTerm }])
-  .limit(50)
+  .limit(50);
 ```
 
 **Parameters**:
@@ -187,7 +187,7 @@ supabase
   `
   )
   .eq('category_id', categoryId)
-  .order('name', { ascending: true })
+  .order('name', { ascending: true });
 ```
 
 **Parameters**:
@@ -229,7 +229,7 @@ supabase
   `
   )
   .eq('menu_item_id', menuItemId)
-  .single()
+  .single();
 ```
 
 **Parameters**:
@@ -287,7 +287,7 @@ supabase
 supabase
   .from('categories')
   .select('id, name, display_order')
-  .order('display_order', { ascending: true })
+  .order('display_order', { ascending: true });
 ```
 
 **Response Success (200)**:
@@ -328,7 +328,7 @@ supabase
     display_order: 10,
   })
   .select()
-  .single()
+  .single();
 ```
 
 **Request Body**:
@@ -391,7 +391,7 @@ supabase
     category:categories(*)
   `
   )
-  .single()
+  .single();
 ```
 
 **Request Body**:
@@ -459,7 +459,7 @@ supabase
     prep_time_mins: 30,
   })
   .select()
-  .single()
+  .single();
 ```
 
 **Request Body**:
@@ -524,7 +524,7 @@ supabase
   })
   .eq('id', menuItemId)
   .select()
-  .single()
+  .single();
 ```
 
 **Parameters**:
@@ -611,7 +611,7 @@ supabase
 **Query**:
 
 ```typescript
-supabase.from('menu_items').delete().eq('id', menuItemId)
+supabase.from('menu_items').delete().eq('id', menuItemId);
 ```
 
 **Parameters**:
@@ -643,7 +643,7 @@ supabase.from('menu_items').delete().eq('id', menuItemId)
 **Query**:
 
 ```typescript
-supabase.from('recipes').delete().eq('id', recipeId)
+supabase.from('recipes').delete().eq('id', recipeId);
 ```
 
 **Parameters**:
@@ -670,7 +670,7 @@ supabase.from('recipes').delete().eq('id', recipeId)
 **Query**:
 
 ```typescript
-supabase.from('categories').delete().eq('id', categoryId)
+supabase.from('categories').delete().eq('id', categoryId);
 ```
 
 **Parameters**:
@@ -716,7 +716,7 @@ supabase.from('categories').delete().eq('id', categoryId)
 supabase.storage.from('menu-images').upload(`${menuItemId}.jpg`, file, {
   cacheControl: '3600',
   upsert: true,
-})
+});
 ```
 
 **Parameters**:
@@ -758,7 +758,7 @@ supabase.storage.from('menu-images').upload(`${menuItemId}.jpg`, file, {
 **Request**:
 
 ```typescript
-supabase.storage.from('menu-images').getPublicUrl(`${menuItemId}.jpg`)
+supabase.storage.from('menu-images').getPublicUrl(`${menuItemId}.jpg`);
 ```
 
 **Response**:
@@ -766,7 +766,7 @@ supabase.storage.from('menu-images').getPublicUrl(`${menuItemId}.jpg`)
 ```typescript
 {
   data: {
-    publicUrl: 'https://...storage.supabase.co/object/public/menu-images/uuid.jpg'
+    publicUrl: 'https://...storage.supabase.co/object/public/menu-images/uuid.jpg';
   }
 }
 ```
@@ -782,7 +782,7 @@ supabase.storage.from('menu-images').getPublicUrl(`${menuItemId}.jpg`)
 **Request**:
 
 ```typescript
-supabase.storage.from('menu-images').remove([`${menuItemId}.jpg`])
+supabase.storage.from('menu-images').remove([`${menuItemId}.jpg`]);
 ```
 
 **Response Success (200)**:
@@ -814,7 +814,7 @@ supabase.storage.from('menu-images').remove([`${menuItemId}.jpg`])
 supabase.auth.signInWithPassword({
   email: 'admin@bistro.com',
   password: 'secure-password',
-})
+});
 ```
 
 **Response Success (200)**:
@@ -863,14 +863,14 @@ supabase.auth.signInWithPassword({
 **Request**:
 
 ```typescript
-supabase.auth.signOut()
+supabase.auth.signOut();
 ```
 
 **Response Success (204)**:
 
 ```typescript
 {
-  error: null
+  error: null;
 }
 ```
 
@@ -883,7 +883,7 @@ supabase.auth.signOut()
 **Request**:
 
 ```typescript
-supabase.auth.getSession()
+supabase.auth.getSession();
 ```
 
 **Response**:

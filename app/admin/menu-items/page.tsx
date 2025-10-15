@@ -1,9 +1,9 @@
-import { createClient } from '@/utils/supabase/server'
-import Link from 'next/link'
-import Image from 'next/image'
+import { createClient } from '@/utils/supabase/server';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default async function MenuItemsPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Fetch menu items with their categories
   const { data: menuItems, error } = await supabase
@@ -14,11 +14,11 @@ export default async function MenuItemsPage() {
       categories!inner(*)
     `
     )
-    .order('name')
+    .order('name');
 
   if (error) {
-    console.error('Error fetching menu items:', error)
-    return <div>Error loading menu items. Please try again later.</div>
+    console.error('Error fetching menu items:', error);
+    return <div>Error loading menu items. Please try again later.</div>;
   }
 
   return (
@@ -144,5 +144,5 @@ export default async function MenuItemsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

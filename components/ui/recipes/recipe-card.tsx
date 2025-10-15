@@ -1,9 +1,9 @@
-import { RecipeType } from '@/types/database.types'
-import Image from 'next/image'
+import { RecipeType } from '@/types/database.types';
+import Image from 'next/image';
 
 type RecipeCardProps = {
-  recipe: RecipeType
-}
+  recipe: RecipeType;
+};
 
 function RecipeCard({ recipe }: RecipeCardProps) {
   return (
@@ -26,6 +26,6 @@ function RecipeCard({ recipe }: RecipeCardProps) {
         </p>
       </div>
     </a>
-  )
+  );
 }
-export default RecipeCard
+export default RecipeCard;

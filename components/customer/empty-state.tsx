@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { SearchX } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { SearchX } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface EmptyStateProps {
-  onClear: () => void
+  onClear: () => void;
 }
 
 export function EmptyState({ onClear }: EmptyStateProps) {
@@ -20,5 +20,5 @@ export function EmptyState({ onClear }: EmptyStateProps) {
         Clear Filters
       </Button>
     </div>
-  )
+  );
 }

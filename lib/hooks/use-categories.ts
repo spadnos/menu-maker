@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
-import type { Category } from '@/lib/supabase/types'
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import type { Category } from '@/lib/supabase/types';
 
 export function useCategories() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        setLoading(true)
-        const supabase = createClient()
+        setLoading(true);
+        const supabase = createClient();
 
         const { data, error: fetchError } = await supabase
           .from('categories')
           .select('*')
-          .order('display_order', { ascending: true })
+          .order('display_order', { ascending: true });
 
-        if (fetchError) throw fetchError
+        if (fetchError) throw fetchError;
 
-        setCategories(data)
-        setError(null)
+        setCategories(data);
+        setError(null);
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error('Failed to fetch categories')
-        )
+        );
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
-  return { categories, loading, error }
+  return { categories, loading, error };
 }

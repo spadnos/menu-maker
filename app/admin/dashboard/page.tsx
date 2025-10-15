@@ -1,17 +1,17 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/server';
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Get menu items count
   const { count: menuItemsCount } = await supabase
     .from('menu_items')
-    .select('*', { count: 'exact', head: true })
+    .select('*', { count: 'exact', head: true });
 
   // Get categories count
   const { count: categoriesCount } = await supabase
     .from('categories')
-    .select('*', { count: 'exact', head: true })
+    .select('*', { count: 'exact', head: true });
 
   return (
     <div>
@@ -163,5 +163,5 @@ export default async function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

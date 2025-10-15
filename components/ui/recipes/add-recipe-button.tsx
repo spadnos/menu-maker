@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { RecipeForm } from '@/components/recipe-form'
-import { createRecipe } from '@/lib/supabase/recipes'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+} from '@/components/ui/dialog';
+import { RecipeForm } from '@/components/recipe-form';
+import { createRecipe } from '@/lib/supabase/recipes';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 // import { RecipeCreateType } from '@/types/database.types'
-import { NewRecipeProps } from '@/types/database.types'
+import { NewRecipeProps } from '@/types/database.types';
 
 export function AddRecipeButton() {
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent, recipe: NewRecipeProps) => {
-    e.preventDefault()
+    e.preventDefault();
     const cleanedRecipe = {
       name: recipe.name,
       description: recipe.description,
@@ -36,14 +36,14 @@ export function AddRecipeButton() {
       prep_time_mins: 0,
       cook_time_mins: 0,
       servings: 0,
-    }
-    await createRecipe(cleanedRecipe)
+    };
+    await createRecipe(cleanedRecipe);
     // console.log('Recipe submitted:', cleanedRecipe)
 
-    setOpen(false)
-    toast.success('Recipe created successfully')
-    router.push('/')
-  }
+    setOpen(false);
+    toast.success('Recipe created successfully');
+    router.push('/');
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -63,5 +63,5 @@ export function AddRecipeButton() {
         <RecipeForm onSubmit={handleSubmit} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }

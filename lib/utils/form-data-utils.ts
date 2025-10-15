@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import { Readable } from 'stream';
 
 /**
  * Parse form data from a request
@@ -6,7 +6,7 @@ import { Readable } from 'stream'
  * @returns Parsed form data as FormData
  */
 export async function getFormData(request: Request): Promise<FormData> {
-  return await request.formData()
+  return await request.formData();
 }
 
 /**
@@ -19,8 +19,8 @@ export function getFileFromFormData(
   formData: FormData,
   fieldName: string
 ): File | null {
-  const file = formData.get(fieldName)
-  return file instanceof File ? file : null
+  const file = formData.get(fieldName);
+  return file instanceof File ? file : null;
 }
 
 /**
@@ -29,14 +29,14 @@ export function getFileFromFormData(
  * @returns A promise that resolves to a Buffer
  */
 export async function fileToBuffer(file: File): Promise<Buffer> {
-  const chunks: Uint8Array[] = []
-  const stream = file.stream() as unknown as Readable
+  const chunks: Uint8Array[] = [];
+  const stream = file.stream() as unknown as Readable;
 
   for await (const chunk of stream) {
-    chunks.push(chunk)
+    chunks.push(chunk);
   }
 
-  return Buffer.concat(chunks)
+  return Buffer.concat(chunks);
 }
 
 /**
@@ -49,8 +49,8 @@ export function getStringFromFormData(
   formData: FormData,
   fieldName: string
 ): string | null {
-  const value = formData.get(fieldName)
-  return value ? String(value) : null
+  const value = formData.get(fieldName);
+  return value ? String(value) : null;
 }
 
 /**
@@ -63,11 +63,11 @@ export function getNumberFromFormData(
   formData: FormData,
   fieldName: string
 ): number | null {
-  const value = formData.get(fieldName)
-  if (value === null) return null
+  const value = formData.get(fieldName);
+  if (value === null) return null;
 
-  const num = Number(value)
-  return isNaN(num) ? null : num
+  const num = Number(value);
+  return isNaN(num) ? null : num;
 }
 
 /**
@@ -80,7 +80,7 @@ export function getBooleanFromFormData(
   formData: FormData,
   fieldName: string
 ): boolean {
-  return formData.get(fieldName) === 'true'
+  return formData.get(fieldName) === 'true';
 }
 
 /**
@@ -93,7 +93,7 @@ export function getStringArrayFromFormData(
   formData: FormData,
   fieldName: string
 ): string[] {
-  return formData.getAll(fieldName).map(String)
+  return formData.getAll(fieldName).map(String);
 }
 
 /**
@@ -106,9 +106,9 @@ export function getDateFromFormData(
   formData: FormData,
   fieldName: string
 ): Date | null {
-  const value = formData.get(fieldName)
-  if (!value) return null
+  const value = formData.get(fieldName);
+  if (!value) return null;
 
-  const date = new Date(String(value))
-  return isNaN(date.getTime()) ? null : date
+  const date = new Date(String(value));
+  return isNaN(date.getTime()) ? null : date;
 }

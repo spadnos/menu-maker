@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 // import { createClient } from '@/utils/supabase/client'
 // import { Session } from '@supabase/supabase-js'
@@ -14,8 +14,8 @@
 // )
 
 type ProvidersProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 // export function useSupabase() {
 //   const context = useContext(SupabaseContext)
@@ -41,5 +41,5 @@ export function Providers({ children }: ProvidersProps) {
   //   }
   // }, [supabase])
 
-  return <div>{children}</div>
+  return <div>{children}</div>;
 }

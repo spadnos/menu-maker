@@ -1,4 +1,4 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
-    ]
+    ];
   },
   images: {
     remotePatterns: [
@@ -37,6 +37,6 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

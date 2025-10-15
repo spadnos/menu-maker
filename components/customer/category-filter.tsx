@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Select,
@@ -6,13 +6,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import type { Category } from '@/lib/supabase/types'
+} from '@/components/ui/select';
+import type { Category } from '@/lib/supabase/types';
 
 interface CategoryFilterProps {
-  categories: Category[]
-  selectedCategory: string | null
-  onSelectCategory: (categoryId: string | null) => void
+  categories: Category[];
+  selectedCategory: string | null;
+  onSelectCategory: (categoryId: string | null) => void;
 }
 
 export function CategoryFilter({
@@ -39,5 +39,5 @@ export function CategoryFilter({
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }

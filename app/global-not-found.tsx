@@ -1,16 +1,16 @@
 // Import global styles and fonts
-import './globals.css'
-import { Inter } from 'next/font/google'
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeftIcon } from 'lucide-react'
+import './globals.css';
+import { Inter } from 'next/font/google';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeftIcon } from 'lucide-react';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found',
   description: 'The page you are looking for does not exist.',
-}
+};
 
 export default function GlobalNotFound() {
   return (
@@ -49,5 +49,5 @@ export default function GlobalNotFound() {
         </main>
       </body>
     </html>
-  )
+  );
 }

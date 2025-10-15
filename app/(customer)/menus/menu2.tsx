@@ -1,5 +1,5 @@
-import MenuItem from '@/components/menu-item'
-import { MenuItemFull } from '@/lib/supabase/types'
+import MenuItem from '@/components/menu-item';
+import { MenuItemFull } from '@/lib/supabase/types';
 
 const MENU = {
   name: 'A Classic Christmas Eve Dinner',
@@ -133,10 +133,10 @@ const MENU = {
       ],
     },
   ],
-}
+};
 
 export default function MenuPage() {
-  const menu = MENU
+  const menu = MENU;
 
   return (
     <main className="min-h-screen bg-background py-16 px-4">
@@ -173,5 +173,5 @@ export default function MenuPage() {
         ))}
       </div>
     </main>
-  )
+  );
 }

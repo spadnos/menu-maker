@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export function BackToRecipes() {
   return (
@@ -10,5 +10,5 @@ export function BackToRecipes() {
       <ArrowLeft className="w-4 h-4 mr-2" />
       Back to Recipes
     </Link>
-  )
+  );
 }

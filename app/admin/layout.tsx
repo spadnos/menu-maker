@@ -1,19 +1,19 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
 
 export default async function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const supabase = await createClient()
+  const supabase = await createClient();
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   // If not logged in, redirect to login page
   if (!user) {
-    redirect('/login')
+    redirect('/login');
   }
 
   // If not admin, show unauthorized
@@ -27,7 +27,7 @@ export default async function AdminLayout({
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -81,5 +81,5 @@ export default async function AdminLayout({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
       </main>
     </div>
-  )
+  );
 }

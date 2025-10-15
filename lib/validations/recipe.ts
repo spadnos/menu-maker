@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const ingredientSchema = z.object({
   id: z.string().uuid().optional(),
@@ -17,7 +17,7 @@ export const ingredientSchema = z.object({
     .int()
     .nonnegative('Order must be a non-negative integer')
     .default(0),
-})
+});
 
 export const instructionSchema = z.object({
   id: z.string().uuid().optional(),
@@ -28,7 +28,7 @@ export const instructionSchema = z.object({
     .int()
     .nonnegative('Order must be a non-negative integer')
     .default(0),
-})
+});
 
 export const recipeSchema = z.object({
   id: z.string().uuid().optional(),
@@ -47,8 +47,8 @@ export const recipeSchema = z.object({
     .default(0),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
-})
+});
 
-export type IngredientFormData = z.infer<typeof ingredientSchema>
-export type InstructionFormData = z.infer<typeof instructionSchema>
-export type RecipeFormData = z.infer<typeof recipeSchema>
+export type IngredientFormData = z.infer<typeof ingredientSchema>;
+export type InstructionFormData = z.infer<typeof instructionSchema>;
+export type RecipeFormData = z.infer<typeof recipeSchema>;

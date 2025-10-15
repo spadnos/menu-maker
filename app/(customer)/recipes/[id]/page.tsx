@@ -1,21 +1,21 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { BackToRecipes } from '@/components/back-to-recipes'
-import { getRecipeById } from '@/lib/supabase/recipes'
-import RecipeDeleteButton from '@/components/recipe/recipe-delete-button'
-import RecipeEditButton from '@/components/recipe/recipe-edit-button'
-import { createClient } from '@/utils/supabase/server'
+import Link from 'next/link';
+import Image from 'next/image';
+import { BackToRecipes } from '@/components/back-to-recipes';
+import { getRecipeById } from '@/lib/supabase/recipes';
+import RecipeDeleteButton from '@/components/recipe/recipe-delete-button';
+import RecipeEditButton from '@/components/recipe/recipe-edit-button';
+import { createClient } from '@/utils/supabase/server';
 
 interface RecipePageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 async function RecipePage({ params }: RecipePageProps) {
-  const { id } = await params
-  const recipe = await getRecipeById(id)
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getUser()
-  const user = data.user
+  const { id } = await params;
+  const recipe = await getRecipeById(id);
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
   // console.log('recipe', recipe)
 
   if (!recipe) {
@@ -28,7 +28,7 @@ async function RecipePage({ params }: RecipePageProps) {
           </span>
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -110,6 +110,6 @@ async function RecipePage({ params }: RecipePageProps) {
         </div>
       </div>
     </main>
-  )
+  );
 }
-export default RecipePage
+export default RecipePage;

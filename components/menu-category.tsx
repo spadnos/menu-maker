@@ -1,9 +1,9 @@
-import { MenuItemFull } from '@/lib/supabase/types'
-import MenuItem from '@/components/menu-item'
+import { MenuItemFull } from '@/lib/supabase/types';
+import MenuItem from '@/components/menu-item';
 
 interface MenuCategoryProps {
-  title: string
-  items: MenuItemFull[]
+  title: string;
+  items: MenuItemFull[];
 }
 
 export function MenuCategory({ title, items }: MenuCategoryProps) {
@@ -23,5 +23,5 @@ export function MenuCategory({ title, items }: MenuCategoryProps) {
         ))}
       </div>
     </section>
-  )
+  );
 }

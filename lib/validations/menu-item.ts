@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const menuItemSchema = z.object({
   id: z.string().uuid().optional(),
@@ -27,6 +27,6 @@ export const menuItemSchema = z.object({
   is_available: z.boolean().default(true),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
-})
+});
 
-export type MenuItemFormData = z.infer<typeof menuItemSchema>
+export type MenuItemFormData = z.infer<typeof menuItemSchema>;

@@ -348,109 +348,109 @@ export interface Database {
     Tables: {
       categories: {
         Row: {
-          id: string
-          name: string
-          display_order: number
-          created_at: string
-        }
+          id: string;
+          name: string;
+          display_order: number;
+          created_at: string;
+        };
         Insert: {
-          id?: string
-          name: string
-          display_order?: number
-          created_at?: string
-        }
+          id?: string;
+          name: string;
+          display_order?: number;
+          created_at?: string;
+        };
         Update: {
-          id?: string
-          name?: string
-          display_order?: number
-          created_at?: string
-        }
-      }
+          id?: string;
+          name?: string;
+          display_order?: number;
+          created_at?: string;
+        };
+      };
       menu_items: {
         Row: {
-          id: string
-          name: string
-          description: string
-          category_id: string
-          image_url: string | null
-          created_at: string
-          updated_at: string
-        }
+          id: string;
+          name: string;
+          description: string;
+          category_id: string;
+          image_url: string | null;
+          created_at: string;
+          updated_at: string;
+        };
         Insert: {
-          id?: string
-          name: string
-          description: string
-          category_id: string
-          image_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
+          id?: string;
+          name: string;
+          description: string;
+          category_id: string;
+          image_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
         Update: {
-          id?: string
-          name?: string
-          description?: string
-          category_id?: string
-          image_url?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
+          id?: string;
+          name?: string;
+          description?: string;
+          category_id?: string;
+          image_url?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       recipes: {
         Row: {
-          id: string
-          menu_item_id: string
-          ingredients: Ingredient[]
-          instructions: string[]
-          prep_time_mins: number | null
-          created_at: string
-          updated_at: string
-        }
+          id: string;
+          menu_item_id: string;
+          ingredients: Ingredient[];
+          instructions: string[];
+          prep_time_mins: number | null;
+          created_at: string;
+          updated_at: string;
+        };
         Insert: {
-          id?: string
-          menu_item_id: string
-          ingredients: Ingredient[]
-          instructions: string[]
-          prep_time_mins?: number | null
-          created_at?: string
-          updated_at?: string
-        }
+          id?: string;
+          menu_item_id: string;
+          ingredients: Ingredient[];
+          instructions: string[];
+          prep_time_mins?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
         Update: {
-          id?: string
-          menu_item_id?: string
-          ingredients?: Ingredient[]
-          instructions?: string[]
-          prep_time_mins?: number | null
-          created_at?: string
-          updated_at?: string
-        }
-      }
-    }
-  }
+          id?: string;
+          menu_item_id?: string;
+          ingredients?: Ingredient[];
+          instructions?: string[];
+          prep_time_mins?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+    };
+  };
 }
 
 export interface Ingredient {
-  name: string
-  amount: string
+  name: string;
+  amount: string;
 }
 
 // Convenience types
-export type Category = Database['public']['Tables']['categories']['Row']
-export type MenuItem = Database['public']['Tables']['menu_items']['Row']
-export type Recipe = Database['public']['Tables']['recipes']['Row']
+export type Category = Database['public']['Tables']['categories']['Row'];
+export type MenuItem = Database['public']['Tables']['menu_items']['Row'];
+export type Recipe = Database['public']['Tables']['recipes']['Row'];
 
 // With relations
 export type MenuItemWithCategory = MenuItem & {
-  category: Category
-}
+  category: Category;
+};
 
 export type MenuItemWithRecipe = MenuItem & {
-  recipe: Recipe | null
-}
+  recipe: Recipe | null;
+};
 
 export type MenuItemFull = MenuItem & {
-  category: Category
-  recipe: Recipe | null
-}
+  category: Category;
+  recipe: Recipe | null;
+};
 ```
 
 ---
@@ -471,7 +471,7 @@ const { data: menuItems } = await supabase
   `
   )
   .order('category.display_order', { ascending: true })
-  .order('name', { ascending: true })
+  .order('name', { ascending: true });
 ```
 
 ### Search Menu Items
@@ -484,13 +484,13 @@ const { data } = await supabase
   .textSearch('name', searchTerm, {
     type: 'websearch',
     config: 'english',
-  })
+  });
 
 // Search by ingredient
 const { data } = await supabase
   .from('recipes')
   .select('*, menu_item:menu_items(*, category:categories(*))')
-  .contains('ingredients', [{ name: searchTerm }])
+  .contains('ingredients', [{ name: searchTerm }]);
 ```
 
 ### Get Recipe Details
@@ -500,7 +500,7 @@ const { data: recipe } = await supabase
   .from('recipes')
   .select('*, menu_item:menu_items(name, description, image_url)')
   .eq('menu_item_id', menuItemId)
-  .single()
+  .single();
 ```
 
 ### Admin CRUD Operations
@@ -516,19 +516,19 @@ const { data, error } = await supabase
     image_url: imageUrl,
   })
   .select()
-  .single()
+  .single();
 
 // Update menu item
 const { error } = await supabase
   .from('menu_items')
   .update({ name: 'Updated Name' })
-  .eq('id', menuItemId)
+  .eq('id', menuItemId);
 
 // Delete menu item (cascades to recipe)
 const { error } = await supabase
   .from('menu_items')
   .delete()
-  .eq('id', menuItemId)
+  .eq('id', menuItemId);
 ```
 
 ---
@@ -568,7 +568,7 @@ const menuItemSchema = z.object({
   description: z.string().min(1).max(2000),
   category_id: z.string().uuid(),
   image_url: z.string().url().nullable(),
-})
+});
 
 // Recipe validation schema
 const recipeSchema = z.object({
@@ -583,7 +583,7 @@ const recipeSchema = z.object({
     .min(1),
   instructions: z.array(z.string().min(1)).min(1),
   prep_time_mins: z.number().int().positive().nullable(),
-})
+});
 ```
 
 ### Database-Level Constraints

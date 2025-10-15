@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const categorySchema = z.object({
   id: z.string().uuid().optional(),
@@ -8,6 +8,6 @@ export const categorySchema = z.object({
     .max(100, 'Category name must be 100 characters or less'),
   display_order: z.number().int().default(0),
   created_at: z.string().optional(),
-})
+});
 
-export type CategoryFormData = z.infer<typeof categorySchema>
+export type CategoryFormData = z.infer<typeof categorySchema>;

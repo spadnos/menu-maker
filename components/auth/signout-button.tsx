@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { signout } from './actions'
-import { Button } from '@/components/ui/button'
+import { signout } from './actions';
+import { Button } from '@/components/ui/button';
 
 function SignoutButton() {
-  return <Button onClick={signout}>Sign out</Button>
+  return <Button onClick={signout}>Sign out</Button>;
 }
-export default SignoutButton
+export default SignoutButton;

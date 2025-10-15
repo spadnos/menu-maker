@@ -1,8 +1,8 @@
-import { createClient } from '@/utils/supabase/server'
-import Link from 'next/link'
+import { createClient } from '@/utils/supabase/server';
+import Link from 'next/link';
 
 export default async function CategoriesPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   // Fetch categories with item counts
   const { data: categories } = await supabase
@@ -15,7 +15,7 @@ export default async function CategoriesPage() {
       )
     `
     )
-    .order('display_order')
+    .order('display_order');
 
   return (
     <div>
@@ -161,5 +161,5 @@ export default async function CategoriesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

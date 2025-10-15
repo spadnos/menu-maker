@@ -244,16 +244,16 @@ SELECT make_user_admin('admin@example.com');
 ### Test Admin Access
 
 ```typescript
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client';
 
-const supabase = createClient()
+const supabase = createClient();
 
 // This should work for admin users
 const { data, error } = await supabase.from('menu_items').insert({
   name: 'Test Item',
   description: 'Test',
   category_id: '<some-category-id>',
-})
+});
 ```
 
 ---

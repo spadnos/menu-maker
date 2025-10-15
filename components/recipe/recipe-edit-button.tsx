@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { RecipeForm } from '@/components/recipe-form'
-import { RecipeType } from '@/types/database.types'
+import { RecipeForm } from '@/components/recipe-form';
+import { RecipeType } from '@/types/database.types';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { toast } from 'sonner'
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { toast } from 'sonner';
 // import { useRouter } from 'next/navigation'
-import { updateRecipe } from '@/lib/supabase/recipes'
-import { NewRecipeProps } from '@/types/database.types'
+import { updateRecipe } from '@/lib/supabase/recipes';
+import { NewRecipeProps } from '@/types/database.types';
 
 function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   // const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent, recipe: NewRecipeProps) => {
-    e.preventDefault()
+    e.preventDefault();
     const cleanedRecipe = {
       id: recipe.id,
       name: recipe.name,
@@ -36,14 +36,14 @@ function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
       prep_time_mins: 0,
       cook_time_mins: 0,
       servings: 0,
-    }
-    console.log('Recipe submitted:', cleanedRecipe)
-    await updateRecipe(cleanedRecipe)
+    };
+    console.log('Recipe submitted:', cleanedRecipe);
+    await updateRecipe(cleanedRecipe);
 
-    setOpen(false)
-    toast.success('Recipe updated successfully')
+    setOpen(false);
+    toast.success('Recipe updated successfully');
     // router.push('/recipes')
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -62,6 +62,6 @@ function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
         <RecipeForm onSubmit={handleSubmit} recipe={recipe} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
-export default RecipeEditButton
+export default RecipeEditButton;

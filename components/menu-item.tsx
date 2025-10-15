@@ -1,9 +1,9 @@
-import Link from 'next/link'
+import Link from 'next/link';
 // import { ArrowRight } from 'lucide-react'
-import type { MenuItemFull } from '@/lib/supabase/types'
+import type { MenuItemFull } from '@/lib/supabase/types';
 
 interface MenuItemProps {
-  item: MenuItemFull
+  item: MenuItemFull;
 }
 
 export default function MenuItem({ item }: MenuItemProps) {
@@ -29,5 +29,5 @@ export default function MenuItem({ item }: MenuItemProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

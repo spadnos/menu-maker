@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 // import { MenuCategory } from '@/components/menu-category'
 
@@ -102,7 +102,7 @@ export default function MenuPage() {
         },
       ],
     },
-  ]
+  ];
   //   const { menuItems, loading: itemsLoading, error: itemsError } = useMenuItems()
   //   const { categories, loading: categoriesLoading } = useCategories()
   //   const {
@@ -228,5 +228,5 @@ export default function MenuPage() {
     //     </div>
     //   )}
     // </div>
-  )
+  );
 }
