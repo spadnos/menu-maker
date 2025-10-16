@@ -32,10 +32,10 @@ function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
       instructions: recipe.instructions
         .split('\n')
         .filter((instruction: string) => instruction !== ''),
-      image_url: null,
-      prep_time_mins: 0,
-      cook_time_mins: 0,
-      servings: 0,
+      image_url: recipe.image_url,
+      prep_time_mins: recipe.prep_time_mins || 0,
+      cook_time_mins: recipe.cook_time_mins || 0,
+      servings: recipe.servings || 0,
     };
     console.log('Recipe submitted:', cleanedRecipe);
     await updateRecipe(cleanedRecipe);
@@ -57,7 +57,7 @@ function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
         aria-describedby="recipe-form"
       >
         <DialogHeader>
-          <DialogTitle>Edit Recipe</DialogTitle>
+          <DialogTitle className="text-primary">Edit Recipe</DialogTitle>
         </DialogHeader>
         <RecipeForm onSubmit={handleSubmit} recipe={recipe} />
       </DialogContent>

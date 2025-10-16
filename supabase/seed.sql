@@ -138,18 +138,12 @@ INSERT INTO menu_items (name, description, category_id, image_url) VALUES
     'https://placehold.co/600x400/e8d5b7/8b4513?text=Gratin+Dauphinois'
   );
 
--- Insert recipes for selected menu items
-INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VALUES
+-- Insert standalone recipes
+INSERT INTO recipes (name, description, ingredients, instructions, prep_time_mins, cook_time_mins, servings) VALUES
   (
-    (SELECT id FROM menu_items WHERE name = 'Grilled Salmon'),
-    '[
-      {"name": "Fresh Atlantic salmon fillet", "amount": "6 oz"},
-      {"name": "Olive oil", "amount": "2 tbsp"},
-      {"name": "Lemon juice", "amount": "1 tbsp"},
-      {"name": "Butter", "amount": "2 tbsp"},
-      {"name": "Fresh dill", "amount": "1 tbsp chopped"},
-      {"name": "Salt and pepper", "amount": "to taste"}
-    ]'::jsonb,
+    'Grilled Salmon',
+    'Fresh Atlantic salmon with lemon butter sauce',
+    '["Fresh Atlantic salmon fillet 6 oz", "Olive oil 2 tbsp", "Lemon juice 1 tbsp", "Butter 2 tbsp", "Fresh dill 1 tbsp chopped", "Salt and pepper to taste"]'::jsonb,
     ARRAY[
       'Preheat grill to medium-high heat (400°F)',
       'Pat salmon dry and brush with olive oil',
@@ -160,24 +154,14 @@ INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VA
       'Remove salmon from grill and drizzle with lemon butter',
       'Serve immediately with seasonal vegetables'
     ],
-    25
+    15,
+    25,
+    2
   ),
   (
-    (SELECT id FROM menu_items WHERE name = 'Coq au Vin'),
-    '[
-      {"name": "Chicken thighs and drumsticks", "amount": "3 lbs"},
-      {"name": "Bacon", "amount": "6 oz, diced"},
-      {"name": "Pearl onions", "amount": "12 oz"},
-      {"name": "Mushrooms", "amount": "8 oz, quartered"},
-      {"name": "Red wine", "amount": "2 cups"},
-      {"name": "Chicken stock", "amount": "1 cup"},
-      {"name": "Tomato paste", "amount": "2 tbsp"},
-      {"name": "Garlic cloves", "amount": "4, minced"},
-      {"name": "Fresh thyme", "amount": "4 sprigs"},
-      {"name": "Bay leaves", "amount": "2"},
-      {"name": "Flour", "amount": "2 tbsp"},
-      {"name": "Butter", "amount": "2 tbsp"}
-    ]'::jsonb,
+    'Coq au Vin',
+    'Traditional French chicken braised in red wine',
+    '["Chicken thighs and drumsticks 3 lbs", "Bacon 6 oz diced", "Pearl onions 12 oz", "Mushrooms 8 oz quartered", "Red wine 2 cups", "Chicken stock 1 cup", "Tomato paste 2 tbsp", "Garlic cloves 4 minced", "Fresh thyme 4 sprigs", "Bay leaves 2", "Flour 2 tbsp", "Butter 2 tbsp"]'::jsonb,
     ARRAY[
       'Season chicken pieces with salt and pepper',
       'In a large Dutch oven, cook bacon until crispy, remove and set aside',
@@ -195,17 +179,14 @@ INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VA
       'Stir in butter until melted',
       'Serve hot with crusty bread or mashed potatoes'
     ],
-    90
+    30,
+    90,
+    4
   ),
   (
-    (SELECT id FROM menu_items WHERE name = 'Crème Brûlée'),
-    '[
-      {"name": "Heavy cream", "amount": "2 cups"},
-      {"name": "Egg yolks", "amount": "6 large"},
-      {"name": "Granulated sugar", "amount": "1/2 cup plus extra for topping"},
-      {"name": "Vanilla extract", "amount": "1 tsp"},
-      {"name": "Salt", "amount": "pinch"}
-    ]'::jsonb,
+    'Crème Brûlée',
+    'Classic French custard with caramelized sugar crust',
+    '["Heavy cream 2 cups", "Egg yolks 6 large", "Granulated sugar 1/2 cup plus extra for topping", "Vanilla extract 1 tsp", "Salt pinch"]'::jsonb,
     ARRAY[
       'Preheat oven to 325°F',
       'Heat cream in a saucepan until it just begins to simmer',
@@ -222,22 +203,14 @@ INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VA
       'Caramelize sugar with kitchen torch or under broiler',
       'Let sugar harden for 1 minute before serving'
     ],
-    60
+    20,
+    45,
+    6
   ),
   (
-    (SELECT id FROM menu_items WHERE name = 'Ratatouille'),
-    '[
-      {"name": "Eggplant", "amount": "1 medium, diced"},
-      {"name": "Zucchini", "amount": "2 medium, diced"},
-      {"name": "Bell peppers", "amount": "2, diced"},
-      {"name": "Tomatoes", "amount": "4 large, diced"},
-      {"name": "Onion", "amount": "1 large, diced"},
-      {"name": "Garlic cloves", "amount": "4, minced"},
-      {"name": "Olive oil", "amount": "1/4 cup"},
-      {"name": "Fresh basil", "amount": "1/4 cup, chopped"},
-      {"name": "Fresh thyme", "amount": "2 tsp"},
-      {"name": "Salt and pepper", "amount": "to taste"}
-    ]'::jsonb,
+    'Ratatouille',
+    'Provençal vegetable stew with eggplant, zucchini, peppers, and tomatoes',
+    '["Eggplant 1 medium diced", "Zucchini 2 medium diced", "Bell peppers 2 diced", "Tomatoes 4 large diced", "Onion 1 large diced", "Garlic cloves 4 minced", "Olive oil 1/4 cup", "Fresh basil 1/4 cup chopped", "Fresh thyme 2 tsp", "Salt and pepper to taste"]'::jsonb,
     ARRAY[
       'Salt eggplant and let sit for 30 minutes to remove bitterness',
       'Rinse and pat dry eggplant',
@@ -252,18 +225,14 @@ INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VA
       'Stir in fresh basil just before serving',
       'Serve hot or at room temperature'
     ],
-    75
+    45,
+    35,
+    4
   ),
   (
-    (SELECT id FROM menu_items WHERE name = 'Chocolate Mousse'),
-    '[
-      {"name": "Dark chocolate", "amount": "8 oz, chopped"},
-      {"name": "Heavy cream", "amount": "2 cups, divided"},
-      {"name": "Egg whites", "amount": "4 large"},
-      {"name": "Granulated sugar", "amount": "1/4 cup"},
-      {"name": "Vanilla extract", "amount": "1 tsp"},
-      {"name": "Salt", "amount": "pinch"}
-    ]'::jsonb,
+    'Chocolate Mousse',
+    'Rich and airy dark chocolate mousse topped with whipped cream',
+    '["Dark chocolate 8 oz chopped", "Heavy cream 2 cups divided", "Egg whites 4 large", "Granulated sugar 1/4 cup", "Vanilla extract 1 tsp", "Salt pinch"]'::jsonb,
     ARRAY[
       'Melt chocolate with 1/2 cup cream in double boiler',
       'Stir until smooth, remove from heat and cool slightly',
@@ -276,7 +245,9 @@ INSERT INTO recipes (menu_item_id, ingredients, instructions, prep_time_mins) VA
       'Refrigerate for at least 2 hours',
       'Top with additional whipped cream before serving'
     ],
-    30
+    20,
+    10,
+    6
   );
 
 -- Note: To create an admin user, you need to:

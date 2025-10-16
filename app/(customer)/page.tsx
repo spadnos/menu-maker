@@ -1,29 +1,15 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import { getRecipes } from '@/lib/supabase/recipes';
 import RecipeGrid from '@/components/ui/recipes/recipe-grid';
 import { AddRecipeButton } from '@/components/ui/recipes/add-recipe-button';
+import { ImportRecipeButton } from '@/components/ui/recipes/import-recipe-button';
 import { SearchBar } from '@/components/customer/search-bar';
-import { useUser } from '@/lib/hooks/get-user';
-import type { RecipeType } from '@/types/database.types';
+import { createClient } from '@/utils/supabase/server';
 
-export default function RecipesPage() {
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
-  const { user } = useUser();
-
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const data = await getRecipes();
-        setRecipes(data);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    };
-
-    fetchRecipes();
-  }, []);
+export default async function RecipesPage() {
+  const recipes = await getRecipes();
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
 
   return (
     <main className="min-h-screen bg-background px-4">
@@ -37,7 +23,12 @@ export default function RecipesPage() {
 
         <div className="flex justify-between items-center mb-8">
           <SearchBar />
-          {user && <AddRecipeButton />}
+          {user && (
+            <div className="flex gap-2">
+              <ImportRecipeButton />
+              <AddRecipeButton />
+            </div>
+          )}
         </div>
         <p>Found {recipes.length} recipes</p>
         {/* Menu Categories */}

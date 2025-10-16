@@ -106,6 +106,21 @@ async function RecipePage({ params }: RecipePageProps) {
                 <RecipeEditButton recipe={recipe} />
               </div>
             )}
+            {recipe.source_url && (
+              <div className="mt-6 p-4 bg-background-light/30 dark:bg-background-dark/30 rounded-lg border border-primary/10">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Original Recipe Source:
+                </p>
+                <a
+                  href={recipe.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline break-all"
+                >
+                  {recipe.source_url}
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>

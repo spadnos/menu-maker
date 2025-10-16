@@ -38,10 +38,3 @@ CREATE POLICY "Admins can manage recipes"
   TO authenticated
   USING (auth.jwt() ->> 'role' = 'admin')
   WITH CHECK (auth.jwt() ->> 'role' = 'admin');
-
--- Creators can update their own recipes
-CREATE POLICY "Creators can update recipes"
-  ON recipes FOR UPDATE
-  TO authenticated
-  USING (auth.uid() = recipes.created_by)
-  WITH CHECK (auth.uid() = recipes.created_by);

@@ -41,5 +41,22 @@ for insert
 to authenticated
 with check (true);
 
+-- Creators can update their own recipes
+create policy "Creators can update recipes"
+on "public"."recipes"
+as permissive
+for update
+to authenticated
+using (auth.uid() = recipes.created_by)
+with check (auth.uid() = recipes.created_by);
+
+-- Creators can delete their own recipes
+create policy "Creators can delete recipes"
+on "public"."recipes"
+as permissive
+for delete
+to authenticated
+using (auth.uid() = recipes.created_by);
+
 
 
