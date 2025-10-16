@@ -18,6 +18,7 @@ async function RecipePage({ params }: RecipePageProps) {
   const user = data.user;
   // console.log('recipe', recipe)
 
+  console.log('recipe', recipe);
   if (!recipe) {
     return (
       <div className="text-center">
@@ -40,22 +41,24 @@ async function RecipePage({ params }: RecipePageProps) {
             {recipe.name}
           </h2>
         </div>
-        {recipe.image_url && (
-          <div className="mb-12 flex justify-between">
-            <Image
-              alt={recipe.name}
-              width={240}
-              height={240}
-              className="w-60 h-auto object-cover rounded-xl shadow-lg"
-              src={recipe.image_url || '/Gemini_Food.png'}
-              priority
-            />
-            <div>
-              <p>{recipe.description}</p>
+        <div className="flex items-start">
+          <div className="">
+            <div className="mr-6">
+              <Image
+                alt={recipe.name}
+                width={240}
+                height={240}
+                className="w-240 h-auto object-cover rounded-xl shadow-lg"
+                src={recipe.image_url || '/Gemini_Food.png'}
+                priority
+              />
             </div>
           </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
+          <div>
+            <p>{recipe.description}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-6 mb-12">
           <div className="md:col-span-1 bg-background-light/50 dark:bg-background-dark/50 p-6 rounded-lg border border-primary/10">
             <h3 className="text-2xl font-bold mb-4 border-b border-primary/20 pb-2 text-black dark:text-white">
               Ingredients
@@ -65,7 +68,7 @@ async function RecipePage({ params }: RecipePageProps) {
                 <li key={index}>
                   {typeof ingredient === 'string'
                     ? ingredient
-                    : ingredient.amount + ' ' + ingredient.name}
+                    : JSON.stringify(ingredient)}
                 </li>
               ))}
             </ul>
@@ -90,13 +93,13 @@ async function RecipePage({ params }: RecipePageProps) {
                   <strong className="font-semibold text-black dark:text-white">
                     Preparation:
                   </strong>{' '}
-                  10 minutes
+                  {recipe.prep_time_mins} minutes
                 </p>
                 <p>
                   <strong className="font-semibold text-black dark:text-white">
                     Cooking:
                   </strong>{' '}
-                  15 minutes
+                  {recipe.cook_time_mins} minutes
                 </p>
               </div>
             </div>
