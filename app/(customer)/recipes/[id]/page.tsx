@@ -16,9 +16,7 @@ async function RecipePage({ params }: RecipePageProps) {
   const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const user = data.user;
-  // console.log('recipe', recipe)
 
-  console.log('recipe', recipe);
   if (!recipe) {
     return (
       <div className="text-center">
@@ -68,7 +66,13 @@ async function RecipePage({ params }: RecipePageProps) {
                 <li key={index}>
                   {typeof ingredient === 'string'
                     ? ingredient
-                    : JSON.stringify(ingredient)}
+                    : ingredient.amount
+                      ? ingredient.amount +
+                        ' ' +
+                        ingredient.unit +
+                        ' ' +
+                        ingredient.name
+                      : ingredient.name}
                 </li>
               ))}
             </ul>

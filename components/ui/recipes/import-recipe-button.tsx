@@ -15,8 +15,10 @@ import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { importRecipeFromUrl } from '@/lib/supabase/import-recipe';
+// import { importRecipeFromUrl } from '@/lib/supabase/import-recipe';
 import { createRecipe } from '@/lib/supabase/recipes';
+// import { extractRecipeFromUrl } from '@/app/ai/flows/recipe-extraction';
+import { parseRecipe } from '@/lib/recipe-parser';
 
 export function ImportRecipeButton() {
   const router = useRouter();
@@ -37,7 +39,12 @@ export function ImportRecipeButton() {
     try {
       // Import recipe from URL using AI
       toast.info('Importing recipe... This may take a few seconds.');
-      const result = await importRecipeFromUrl(url);
+      // const result = await importRecipeFromUrl(url);
+      const result = await parseRecipe(url);
+      // console.log('recipe result', result);
+      // const result = { success: false, data: null, error: null };
+      // toast.info('trying Gemini...please wait');
+      // await extractRecipeFromUrl(url);
 
       if (!result.success || !result.data) {
         toast.error(result.error || 'Failed to import recipe');
@@ -45,28 +52,7 @@ export function ImportRecipeButton() {
         return;
       }
 
-      // Create the recipe in the database
-      // Map imported ingredients to include order field
-      const ingredientsWithOrder = result.data.ingredients.map(
-        (ingredient, index) => ({
-          ...ingredient,
-          order: index,
-        })
-      );
-
-      const recipeToCreate = {
-        name: result.data.name,
-        description: result.data.description,
-        ingredients: ingredientsWithOrder,
-        instructions: result.data.instructions,
-        prep_time_mins: result.data.prep_time_mins,
-        cook_time_mins: result.data.cook_time_mins,
-        servings: result.data.servings,
-        image_url: null,
-        source_url: url,
-      };
-
-      await createRecipe(recipeToCreate);
+      await createRecipe(result.data);
 
       toast.success('Recipe imported successfully!');
       setOpen(false);

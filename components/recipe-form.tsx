@@ -8,36 +8,27 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
-import { RecipeType } from '@/types/database.types';
+import type { RecipeType, RecipeCreateType } from '@/types/database.types';
+import type { IngredientType } from '@/lib/supabase/recipes';
 import Image from 'next/image';
-
-type NewRecipeProps = {
-  name: string;
-  description: string;
-  ingredients: string;
-  instructions: string;
-  image_url: string | null;
-  prep_time_mins: number;
-  cook_time_mins: number;
-  servings: number;
-};
+import { parseIngredients, parseInstructions } from '@/lib/utils/recipe';
 
 interface RecipeFormProps {
-  onSubmit: (e: React.FormEvent, recipe: NewRecipeProps) => void;
+  onSubmit: (e: React.FormEvent, recipe: RecipeCreateType) => void;
   recipe?: RecipeType;
 }
 
 export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
-  const [updatedRecipe, setUpdatedRecipe] = useState({
-    id: recipe?.id || null,
+  const [updatedRecipe, setUpdatedRecipe] = useState<RecipeCreateType>({
     name: recipe?.name || '',
     description: recipe?.description || '',
-    ingredients: recipe?.ingredients.join('\n') || '',
-    instructions: recipe?.instructions.join('\n') || '',
+    ingredients: recipe?.ingredients || [],
+    instructions: recipe?.instructions || [],
     image_url: recipe?.image_url || null,
     prep_time_mins: recipe?.prep_time_mins || 0,
     cook_time_mins: recipe?.cook_time_mins || 0,
     servings: recipe?.servings || 0,
+    source_url: recipe?.source_url || null,
   });
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
@@ -105,16 +96,35 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
   };
 
   const handleIngredientsChange = (value: string) => {
-    setUpdatedRecipe((prev) => ({
-      ...prev,
-      ingredients: value,
-    }));
+    const parsedIngredients = parseIngredients(value);
+
+    setUpdatedRecipe((prev) => {
+      // Create a new ingredients array with proper types
+      const ingredients = parsedIngredients.map((ing, index) => {
+        // Find existing ingredient to preserve ID if it exists
+        const existingIngredient = Array.isArray(prev.ingredients)
+          ? prev.ingredients[index]
+          : null;
+
+        return {
+          ...ing,
+          id: existingIngredient?.id || `temp-${Date.now()}-${index}`,
+          recipe_id: (prev as RecipeType).id || '',
+        } as IngredientType;
+      });
+
+      return {
+        ...prev,
+        ingredients,
+      } as RecipeCreateType;
+    });
   };
 
   const handleInstructionsChange = (value: string) => {
+    const instructions = parseInstructions(value);
     setUpdatedRecipe((prev) => ({
       ...prev,
-      instructions: value,
+      instructions,
     }));
   };
 
@@ -237,7 +247,14 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
         </p>
         <Textarea
           id="ingredients"
-          value={updatedRecipe.ingredients}
+          value={updatedRecipe.ingredients
+            .map((ing) => {
+              if (ing.amount && ing.unit) {
+                return `${ing.amount} ${ing.unit} ${ing.name}`.trim();
+              }
+              return ing.name;
+            })
+            .join('\n')}
           onChange={(e) => handleIngredientsChange(e.target.value)}
           placeholder={[
             '2 cups all-purpose flour',

@@ -1,7 +1,7 @@
 'use client';
 
 import { RecipeForm } from '@/components/recipe-form';
-import { RecipeType } from '@/types/database.types';
+import type { RecipeType } from '@/types/database.types';
 import {
   Dialog,
   DialogContent,
@@ -14,35 +14,38 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 // import { useRouter } from 'next/navigation'
 import { updateRecipe } from '@/lib/supabase/recipes';
-import { NewRecipeProps } from '@/types/database.types';
+// Remove unused imports
 
 function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
   const [open, setOpen] = useState(false);
   // const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent, recipe: NewRecipeProps) => {
+  const handleSubmit = async (
+    e: React.FormEvent,
+    formData: Omit<
+      RecipeType,
+      'id' | 'created_at' | 'updated_at' | 'created_by'
+    >
+  ) => {
     e.preventDefault();
-    const cleanedRecipe = {
-      id: recipe.id,
-      name: recipe.name,
-      description: recipe.description,
-      ingredients: recipe.ingredients
-        .split('\n')
-        .filter((ingredient: string) => ingredient !== ''),
-      instructions: recipe.instructions
-        .split('\n')
-        .filter((instruction: string) => instruction !== ''),
-      image_url: recipe.image_url,
-      prep_time_mins: recipe.prep_time_mins || 0,
-      cook_time_mins: recipe.cook_time_mins || 0,
-      servings: recipe.servings || 0,
-    };
-    console.log('Recipe submitted:', cleanedRecipe);
-    await updateRecipe(cleanedRecipe);
 
-    setOpen(false);
-    toast.success('Recipe updated successfully');
-    // router.push('/recipes')
+    // Create the recipe data with the existing ID from props
+    const recipeData: Partial<RecipeType> = {
+      ...formData,
+      id: recipe.id, // Use the ID from the original recipe
+      created_at: recipe.created_at, // Preserve the original creation date
+      updated_at: new Date().toISOString(), // Update the last modified date
+      created_by: recipe.created_by, // Preserve the original creator
+    };
+
+    try {
+      await updateRecipe(recipeData);
+      setOpen(false);
+      toast.success('Recipe updated successfully');
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      toast.error('Failed to update recipe');
+    }
   };
 
   return (
@@ -59,7 +62,16 @@ function RecipeEditButton({ recipe }: { recipe: RecipeType }) {
         <DialogHeader>
           <DialogTitle className="text-primary">Edit Recipe</DialogTitle>
         </DialogHeader>
-        <RecipeForm onSubmit={handleSubmit} recipe={recipe} />
+        <RecipeForm
+          onSubmit={handleSubmit}
+          recipe={{
+            ...recipe,
+            // Ensure all required fields are present
+            prep_time_mins: recipe.prep_time_mins || 0,
+            cook_time_mins: recipe.cook_time_mins || 0,
+            servings: recipe.servings || 0,
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

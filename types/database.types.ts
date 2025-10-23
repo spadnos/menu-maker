@@ -34,7 +34,7 @@ export type RecipeType = {
   name: string;
   description: string;
   image_url: string | null;
-  ingredients: string[] | IngredientType[] | IngredientCreateType[];
+  ingredients: IngredientType[];
   instructions: string[];
   prep_time_mins: number;
   cook_time_mins: number;
@@ -43,19 +43,6 @@ export type RecipeType = {
   created_at: string;
   updated_at: string;
   created_by: string;
-};
-
-export type NewRecipeProps = {
-  id?: string;
-  name: string;
-  description: string;
-  ingredients: string;
-  instructions: string;
-  image_url: string | null;
-  prep_time_mins: number;
-  cook_time_mins: number;
-  servings: number;
-  source_url?: string | null;
 };
 
 export type RecipeCreateType = Omit<

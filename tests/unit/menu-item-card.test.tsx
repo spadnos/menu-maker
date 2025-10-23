@@ -12,12 +12,8 @@ describe('MenuItemCard', () => {
     image_url: 'https://example.com/image.jpg',
     created_at: '2024-01-01',
     updated_at: '2024-01-01',
-    category: {
-      id: 'cat-1',
-      name: 'Test Category',
-      display_order: 0,
-      created_at: '2024-01-01',
-    },
+    display_order: 0,
+    price: '12.99',
     recipe: {
       id: 'recipe-1',
       menu_item_id: '123',
