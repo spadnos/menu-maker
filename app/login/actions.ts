@@ -65,6 +65,7 @@ export async function signInWithGoogle() {
 
   // Construct the proper redirect URL based on environment
   const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  console.log('signInWithGoogle', process.env.NEXT_PUBLIC_APP_URL, origin);
   const redirectTo = `${origin}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
