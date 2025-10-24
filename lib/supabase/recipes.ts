@@ -1,38 +1,12 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
-import type { RecipeCreateType, RecipeType } from '@/types/database.types';
-import { z } from 'zod';
+import type { RecipeCreateType, RecipeType } from '@/types/recipes';
 import { revalidatePath } from 'next/cache';
 
-const ingredientSchema = z.object({
-  name: z.string().min(1, 'Ingredient name cannot be empty'),
-  amount: z.number(),
-  unit: z.string(),
-  order: z.number().int().nonnegative(),
-});
-export type IngredientType = z.infer<typeof ingredientSchema>;
+import { recipeValidationSchema } from '../../types/recipes';
 
-const recipeValidationSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  description: z.string().optional(),
-  image_url: z.nullable(z.string()).optional(),
-  ingredients: z.array(ingredientSchema).refine((val) => val.length > 0, {
-    message: 'At least one ingredient is required',
-  }),
-  instructions: z
-    .array(z.string().min(1, 'Instruction cannot be empty'))
-    .min(1, 'At least one instruction is required'),
-  prep_time_mins: z
-    .number()
-    .int()
-    .nonnegative('Prep time must be a non-negative number')
-    .max(1440, 'Prep time must be less than 24 hours (1440 minutes)')
-    .default(0),
-  source_url: z.nullable(z.string().url()).optional(),
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
-});
+export type { IngredientType } from '../../types/recipes';
 
 export const createRecipe = async (recipe: RecipeCreateType) => {
   // console.log('createRecipe:recipe', recipe);

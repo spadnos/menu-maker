@@ -15,23 +15,19 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 // import { RecipeCreateType } from '@/types/database.types'
-import { NewRecipeProps } from '@/types/database.types';
+import { RecipeCreateType } from '@/types/recipes';
 
 export function AddRecipeButton() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent, recipe: NewRecipeProps) => {
+  const handleSubmit = async (e: React.FormEvent, recipe: RecipeCreateType) => {
     e.preventDefault();
     const cleanedRecipe = {
       name: recipe.name,
       description: recipe.description,
-      ingredients: recipe.ingredients
-        .split('\n')
-        .filter((ingredient) => ingredient !== ''),
-      instructions: recipe.instructions
-        .split('\n')
-        .filter((instruction) => instruction !== ''),
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
       image_url: recipe.image_url,
       prep_time_mins: recipe.prep_time_mins || 0,
       cook_time_mins: recipe.cook_time_mins || 0,

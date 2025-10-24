@@ -3,8 +3,8 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { URL } from 'url';
-import type { IngredientCreateType } from '@/types/database.types';
-import type { RecipeCreateType } from '@/types/database.types';
+import type { IngredientCreateType, IngredientType } from '@/types/recipes';
+import type { RecipeCreateType } from '@/types/recipes';
 
 interface ParseRecipeResponse {
   success: boolean;
@@ -18,19 +18,44 @@ interface ParseRecipeResponse {
  * @returns {Promise<Object>} A promise that resolves to the parsed recipe
  */
 export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
+  let html = '';
   try {
     // Validate URL
     new URL(url); // Will throw if invalid
+    console.log('Fetching recipe from:', url);
 
-    // Fetch the webpage
-    const { data: html } = await axios.get(url, {
+    // Fetch the webpage with enhanced headers
+    const response = await axios.get(url, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        Connection: 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0',
       },
+      timeout: 10000, // 10 second timeout
     });
-    // console.log(html);
 
+    html = response.data;
+    console.log('Successfully fetched recipe');
+  } catch (error) {
+    console.error('Error fetching recipe:', error);
+    return {
+      success: false,
+      data: null,
+      error:
+        'Failed to fetch recipe. The website might be blocking automated requests. Please try again later or use a different recipe URL.',
+    };
+  }
+
+  try {
     const $ = cheerio.load(html);
 
     // Try to find recipe in Schema.org/Recipe format (most reliable)
@@ -95,7 +120,7 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
                 ? recipeObj.description
                 : $('p').first().text().trim()) || '',
             ingredients: (() => {
-              const ingredients: IngredientCreateType[] = [];
+              const ingredients: IngredientType[] = [];
               const items = Array.isArray(recipeObj.recipeIngredient)
                 ? recipeObj.recipeIngredient
                 : Array.isArray(recipeObj.ingredients)

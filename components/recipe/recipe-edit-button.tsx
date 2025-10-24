@@ -1,7 +1,7 @@
 'use client';
 
 import { RecipeForm } from '@/components/recipe-form';
-import type { RecipeType } from '@/types/database.types';
+import type { RecipeType } from '@/types/recipes';
 import {
   Dialog,
   DialogContent,

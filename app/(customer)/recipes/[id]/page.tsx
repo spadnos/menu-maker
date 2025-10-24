@@ -5,6 +5,8 @@ import { getRecipeById } from '@/lib/supabase/recipes';
 import RecipeDeleteButton from '@/components/recipe/recipe-delete-button';
 import RecipeEditButton from '@/components/recipe/recipe-edit-button';
 import { createClient } from '@/utils/supabase/server';
+import { formatIngredients, formatInstructions } from '@/lib/utils/recipe';
+import { IngredientType } from '@/lib/supabase/recipes';
 
 interface RecipePageProps {
   params: Promise<{ id: string }>;
@@ -62,19 +64,11 @@ async function RecipePage({ params }: RecipePageProps) {
               Ingredients
             </h3>
             <ul className="space-y-3 text-base text-black/80 dark:text-white/80">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index}>
-                  {typeof ingredient === 'string'
-                    ? ingredient
-                    : ingredient.amount
-                      ? ingredient.amount +
-                        ' ' +
-                        ingredient.unit +
-                        ' ' +
-                        ingredient.name
-                      : ingredient.name}
-                </li>
-              ))}
+              {recipe.ingredients.map(
+                (ingredient: IngredientType, index: number) => (
+                  <li key={index}>{formatIngredients([ingredient])}</li>
+                )
+              )}
             </ul>
           </div>
           <div className="md:col-span-2">
@@ -83,9 +77,11 @@ async function RecipePage({ params }: RecipePageProps) {
                 Instructions
               </h3>
               <ol className="space-y-4 text-base leading-relaxed text-black/80 dark:text-white/80 list-decimal list-inside">
-                {recipe.instructions.map((instruction, index) => (
-                  <li key={index}>{instruction}</li>
-                ))}
+                {recipe.instructions.map(
+                  (instruction: string, index: number) => (
+                    <li key={index}>{formatInstructions([instruction])}</li>
+                  )
+                )}
               </ol>
             </div>
             <div>

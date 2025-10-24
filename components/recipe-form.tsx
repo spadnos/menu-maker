@@ -8,8 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
-import type { RecipeType, RecipeCreateType } from '@/types/database.types';
-import type { IngredientType } from '@/lib/supabase/recipes';
+import type { RecipeType, RecipeCreateType } from '@/types/recipes';
 import Image from 'next/image';
 import { parseIngredients, parseInstructions } from '@/lib/utils/recipe';
 
@@ -100,23 +99,10 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
 
     setUpdatedRecipe((prev) => {
       // Create a new ingredients array with proper types
-      const ingredients = parsedIngredients.map((ing, index) => {
-        // Find existing ingredient to preserve ID if it exists
-        const existingIngredient = Array.isArray(prev.ingredients)
-          ? prev.ingredients[index]
-          : null;
-
-        return {
-          ...ing,
-          id: existingIngredient?.id || `temp-${Date.now()}-${index}`,
-          recipe_id: (prev as RecipeType).id || '',
-        } as IngredientType;
-      });
-
       return {
         ...prev,
-        ingredients,
-      } as RecipeCreateType;
+        ingredients: parsedIngredients,
+      };
     });
   };
 

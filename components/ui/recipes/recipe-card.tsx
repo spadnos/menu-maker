@@ -1,4 +1,4 @@
-import { RecipeType } from '@/types/database.types';
+import { RecipeType } from '@/types/recipes';
 import Image from 'next/image';
 
 type RecipeCardProps = {

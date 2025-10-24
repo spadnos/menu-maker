@@ -1,6 +1,18 @@
 -- Create storage bucket for menu images
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'buckets') THEN
+    CREATE TABLE storage.buckets (
+      id UUID PRIMARY KEY,
+      name TEXT UNIQUE NOT NULL,
+      public BOOLEAN NOT NULL
+    );
+  END IF;
+END $$;
+
 INSERT INTO storage.buckets (id, name, public)
-VALUES ('menu-images', 'menu-images', true);
+SELECT 'menu-images', 'menu-images', true
+WHERE NOT EXISTS (SELECT 1 FROM storage.buckets WHERE id = 'menu-images');
 
 -- Storage policies for menu-images bucket
 

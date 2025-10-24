@@ -1,4 +1,4 @@
-import { RecipeType } from '@/types/database.types';
+import { RecipeType } from '@/types/recipes';
 import RecipeCard from './recipe-card';
 
 function RecipeGrid({ recipes }: { recipes: RecipeType[] }) {
