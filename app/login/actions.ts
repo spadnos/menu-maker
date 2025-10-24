@@ -4,7 +4,6 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/server';
-import { headers } from 'next/headers';
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -65,9 +64,7 @@ export async function signInWithGoogle() {
   const supabase = await createClient();
 
   // Construct the proper redirect URL based on environment
-  // const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const origin = (await headers()).get('origin');
-  console.log('signInWithGoogle', process.env.NEXT_PUBLIC_APP_URL, origin);
+  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const redirectTo = `${origin}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
