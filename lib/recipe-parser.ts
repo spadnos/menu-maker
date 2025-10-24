@@ -24,34 +24,115 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
     new URL(url); // Will throw if invalid
     console.log('Fetching recipe from:', url);
 
-    // Fetch the webpage with enhanced headers
-    const response = await axios.get(url, {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        Connection: 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Cache-Control': 'max-age=0',
-      },
-      timeout: 10000, // 10 second timeout
-    });
+    // Generate realistic browser headers to avoid bot detection
+    const userAgents = [
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15',
+    ];
 
-    html = response.data;
-    console.log('Successfully fetched recipe');
+    const userAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
+    const isChrome = userAgent.includes('Chrome');
+
+    // Build headers that mimic a real browser
+    const headers: Record<string, string> = {
+      'User-Agent': userAgent,
+      Accept:
+        'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept-Encoding': 'gzip, deflate, br',
+      Connection: 'keep-alive',
+      'Upgrade-Insecure-Requests': '1',
+      'Sec-Fetch-Dest': 'document',
+      'Sec-Fetch-Mode': 'navigate',
+      'Sec-Fetch-Site': 'none',
+      'Sec-Fetch-User': '?1',
+      'Cache-Control': 'max-age=0',
+      DNT: '1',
+    };
+
+    // Add Chrome-specific headers if using Chrome UA
+    if (isChrome) {
+      headers['sec-ch-ua'] =
+        '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"';
+      headers['sec-ch-ua-mobile'] = '?0';
+      headers['sec-ch-ua-platform'] = userAgent.includes('Windows')
+        ? '"Windows"'
+        : '"macOS"';
+    }
+
+    // Add a random referer occasionally to appear more natural
+    if (Math.random() > 0.7) {
+      const urlObj = new URL(url);
+      headers['Referer'] = `${urlObj.protocol}//${urlObj.host}`;
+    }
+
+    // Implement retry logic with exponential backoff
+    let lastError: Error | null = null;
+    const maxRetries = 3;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        // Add a small random delay before each request (except first)
+        if (attempt > 0) {
+          const delay = Math.random() * 1000 + 500 * Math.pow(2, attempt - 1); // 0.5s, 1s, 2s base with randomization
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          console.log(
+            `Retry attempt ${attempt + 1} after ${Math.round(delay)}ms delay`
+          );
+        }
+
+        const response = await axios.get(url, {
+          headers,
+          timeout: 15000, // 15 second timeout
+          maxRedirects: 5,
+          validateStatus: (status) => status < 500, // Don't throw on 4xx errors
+        });
+
+        // Check for successful response
+        if (response.status === 200) {
+          html = response.data;
+          console.log('Successfully fetched recipe');
+          break;
+        } else if (response.status === 403 || response.status === 429) {
+          throw new Error(
+            `Access denied (${response.status}). The website may be blocking automated requests.`
+          );
+        } else if (response.status >= 400) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+      } catch (error) {
+        lastError =
+          error instanceof Error ? error : new Error('Unknown error occurred');
+
+        // Don't retry on certain errors
+        if (
+          axios.isAxiosError(error) &&
+          (error.code === 'ENOTFOUND' || error.code === 'ERR_INVALID_URL')
+        ) {
+          break; // No point retrying DNS or URL errors
+        }
+
+        if (attempt === maxRetries - 1) {
+          // Last attempt failed
+          break;
+        }
+      }
+    }
+
+    // If we still don't have HTML after retries, throw the last error
+    if (!html && lastError) {
+      throw lastError;
+    }
   } catch (error) {
     console.error('Error fetching recipe:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
     return {
       success: false,
       data: null,
-      error:
-        'Failed to fetch recipe. The website might be blocking automated requests. Please try again later or use a different recipe URL.',
+      error: `Failed to fetch recipe: ${errorMessage}. The website might be blocking automated requests or is temporarily unavailable.`,
     };
   }
 
