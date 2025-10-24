@@ -59,3 +59,55 @@ export async function signup(formData: FormData) {
   revalidatePath('/', 'layout');
   redirect('/');
 }
+
+export async function signInWithGoogle() {
+  const supabase = await createClient();
+
+  // Construct the proper redirect URL based on environment
+  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const redirectTo = `${origin}/auth/callback`;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+    },
+  });
+
+  if (error) {
+    console.error('Google OAuth error:', error.message);
+    redirect(`/error?message=${encodeURIComponent(error.message)}`);
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
+}
+
+export async function signInWithFacebook() {
+  const supabase = await createClient();
+
+  // Construct the proper redirect URL based on environment
+  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const redirectTo = `${origin}/auth/callback`;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: {
+      redirectTo,
+    },
+  });
+
+  if (error) {
+    console.error('Facebook OAuth error:', error.message);
+    redirect(`/error?message=${encodeURIComponent(error.message)}`);
+  }
+
+  if (data.url) {
+    redirect(data.url);
+  }
+}
