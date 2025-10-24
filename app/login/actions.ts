@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 import { createClient } from '@/utils/supabase/server';
 
@@ -63,9 +64,14 @@ export async function signup(formData: FormData) {
 export async function signInWithGoogle() {
   const supabase = await createClient();
 
-  // Construct the proper redirect URL based on environment
-  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  // Get the origin from headers to construct the proper redirect URL
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'http';
+  const origin = `${protocol}://${host}`;
+
   const redirectTo = `${origin}/auth/callback`;
+  console.log('Redirecting to:', redirectTo);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -73,6 +79,7 @@ export async function signInWithGoogle() {
       redirectTo,
     },
   });
+  console.log('Data:', data);
 
   if (error) {
     console.error('Google OAuth error:', error.message);
@@ -87,8 +94,12 @@ export async function signInWithGoogle() {
 export async function signInWithFacebook() {
   const supabase = await createClient();
 
-  // Construct the proper redirect URL based on environment
-  const origin = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  // Get the origin from headers to construct the proper redirect URL
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'http';
+  const origin = `${protocol}://${host}`;
+
   const redirectTo = `${origin}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
