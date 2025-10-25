@@ -10,7 +10,12 @@ import { Label } from '@/components/ui/label';
 
 import type { RecipeType, RecipeCreateType } from '@/types/recipes';
 import Image from 'next/image';
-import { parseIngredients, parseInstructions } from '@/lib/utils/recipe';
+import {
+  formatIngredients,
+  formatInstructions,
+  parseIngredients,
+  parseInstructions,
+} from '@/lib/utils/recipe';
 
 interface RecipeFormProps {
   onSubmit: (e: React.FormEvent, recipe: RecipeCreateType) => void;
@@ -234,12 +239,7 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
         <Textarea
           id="ingredients"
           value={updatedRecipe.ingredients
-            .map((ing) => {
-              if (ing.amount && ing.unit) {
-                return `${ing.amount} ${ing.unit} ${ing.name}`.trim();
-              }
-              return ing.name;
-            })
+            .map((ing) => formatIngredients([ing]))
             .join('\n')}
           onChange={(e) => handleIngredientsChange(e.target.value)}
           placeholder={[
@@ -265,7 +265,7 @@ export function RecipeForm({ onSubmit, recipe }: RecipeFormProps) {
         </p>
         <Textarea
           id="instructions"
-          value={updatedRecipe.instructions}
+          value={formatInstructions(updatedRecipe.instructions)}
           onChange={(e) => handleInstructionsChange(e.target.value)}
           placeholder={[
             'Preheat oven to 350°FM\nMix dry ingredients in a bowl',

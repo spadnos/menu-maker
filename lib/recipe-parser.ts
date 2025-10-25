@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 import { URL } from 'url';
 import type { IngredientCreateType, IngredientType } from '@/types/recipes';
 import type { RecipeCreateType } from '@/types/recipes';
-
+import { decodeHTML } from 'entities';
 interface ParseRecipeResponse {
   success: boolean;
   data: RecipeCreateType | null;
@@ -193,13 +193,17 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
           // Format the recipe data
           const formattedRecipe: RecipeCreateType = {
             name:
-              (typeof recipeObj.name === 'string'
-                ? recipeObj.name
-                : $('h1').first().text().trim()) || 'Untitled Recipe',
+              decodeHTML(
+                typeof recipeObj.name === 'string'
+                  ? recipeObj.name
+                  : $('h1').first().text().trim()
+              ) || 'Untitled Recipe',
             description:
-              (typeof recipeObj.description === 'string'
-                ? recipeObj.description
-                : $('p').first().text().trim()) || '',
+              decodeHTML(
+                typeof recipeObj.description === 'string'
+                  ? recipeObj.description
+                  : $('p').first().text().trim()
+              ) || '',
             ingredients: (() => {
               const ingredients: IngredientType[] = [];
               const items = Array.isArray(recipeObj.recipeIngredient)
@@ -212,7 +216,7 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
                 const name =
                   typeof item === 'string' ? item : 'Unnamed ingredient';
                 ingredients.push({
-                  name,
+                  name: decodeHTML(name),
                   amount: 0, // Default values
                   unit: '',
                   order: ingredients.length,
@@ -226,14 +230,16 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
                 if (typeof step === 'string') return step;
                 if (step && typeof step === 'object') {
                   const stepObj = step as Record<string, unknown>;
-                  if ('text' in stepObj) return String(stepObj.text);
-                  if ('name' in stepObj) return String(stepObj.name);
+                  if ('text' in stepObj)
+                    return decodeHTML(String(stepObj.text));
+                  if ('name' in stepObj)
+                    return decodeHTML(String(stepObj.name));
                   if (
                     '@type' in stepObj &&
                     stepObj['@type'] === 'HowToStep' &&
                     'text' in stepObj
                   ) {
-                    return String(stepObj.text);
+                    return decodeHTML(String(stepObj.text));
                   }
                 }
                 return null;
@@ -247,7 +253,7 @@ export async function parseRecipe(url: string): Promise<ParseRecipeResponse> {
               } else if (typeof recipeObj.instructions === 'string') {
                 instructions.push(recipeObj.instructions);
               }
-              return instructions;
+              return instructions.map((instruction) => decodeHTML(instruction));
             })(),
             cook_time_mins:
               typeof recipeObj.cookTime === 'number'

@@ -96,5 +96,5 @@ export function parseInstructions(text: string): string[] {
  * @returns A string with each instruction on a new line
  */
 export function formatInstructions(instructions: string[]): string {
-  return instructions.join('\n');
+  return instructions.join('\n\n');
 }

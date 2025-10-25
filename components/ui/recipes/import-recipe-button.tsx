@@ -41,7 +41,6 @@ export function ImportRecipeButton() {
       toast.info('Importing recipe... This may take a few seconds.');
       // const result = await importRecipeFromUrl(url);
       const result = await parseRecipe(url);
-      // console.log('recipe result', result);
       // const result = { success: false, data: null, error: null };
       // toast.info('trying Gemini...please wait');
       // await extractRecipeFromUrl(url);

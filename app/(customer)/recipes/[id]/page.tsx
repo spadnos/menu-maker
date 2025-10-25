@@ -58,12 +58,12 @@ async function RecipePage({ params }: RecipePageProps) {
             <p>{recipe.description}</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mt-6 mb-12">
-          <div className="md:col-span-1 bg-background-light/50 dark:bg-background-dark/50 p-6 rounded-lg border border-primary/10">
-            <h3 className="text-2xl font-bold mb-4 border-b border-primary/20 pb-2 text-black dark:text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-6 mb-12">
+          <div>
+            <h3 className="text-2xl font-bold mb-6 text-black dark:text-white">
               Ingredients
             </h3>
-            <ul className="space-y-3 text-base text-black/80 dark:text-white/80">
+            <ul className="space-y-3 text text-black/80 dark:text-white/80">
               {recipe.ingredients.map(
                 (ingredient: IngredientType, index: number) => (
                   <li key={index}>{formatIngredients([ingredient])}</li>
@@ -71,61 +71,64 @@ async function RecipePage({ params }: RecipePageProps) {
               )}
             </ul>
           </div>
-          <div className="md:col-span-2">
-            <div className="md:col-span-1 bg-background-light/50 dark:bg-background-dark/50 p-6 rounded-lg border border-primary/10">
-              <h3 className="text-2xl font-bold mb-4 border-b border-primary/20 pb-2 text-black dark:text-white">
-                Instructions
-              </h3>
-              <ol className="space-y-4 text-base leading-relaxed text-black/80 dark:text-white/80 list-decimal list-inside">
-                {recipe.instructions.map(
-                  (instruction: string, index: number) => (
-                    <li key={index}>{formatInstructions([instruction])}</li>
-                  )
-                )}
-              </ol>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold mb-4 border-b border-primary/20 pb-2 text-black dark:text-white">
-                Estimated Time
-              </h3>
-              <div className="flex space-x-8 text-base text-black/80 dark:text-white/80">
-                <p>
-                  <strong className="font-semibold text-black dark:text-white">
-                    Preparation:
-                  </strong>{' '}
-                  {recipe.prep_time_mins} minutes
-                </p>
-                <p>
-                  <strong className="font-semibold text-black dark:text-white">
-                    Cooking:
-                  </strong>{' '}
-                  {recipe.cook_time_mins} minutes
-                </p>
-              </div>
-            </div>
-            {recipe.created_by === user?.id && (
-              <div className="flex space-x-4 mt-4">
-                <RecipeDeleteButton id={recipe.id} />
-                <RecipeEditButton recipe={recipe} />
-              </div>
-            )}
-            {recipe.source_url && (
-              <div className="mt-6 p-4 bg-background-light/30 dark:bg-background-dark/30 rounded-lg border border-primary/10">
-                <p className="text-sm text-muted-foreground mb-2">
-                  Original Recipe Source:
-                </p>
-                <a
-                  href={recipe.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline break-all"
-                >
-                  {recipe.source_url}
-                </a>
-              </div>
-            )}
+          <div>
+            <h3 className="text-2xl font-bold mb-6 text-black dark:text-white">
+              Directions
+            </h3>
+            <ol className="space-y-6">
+              {recipe.instructions.map((instruction: string, index: number) => (
+                <li key={index} className="flex gap-4">
+                  <span className="text-2xl font-bold text-red-500 flex-shrink-0">
+                    {index + 1}
+                  </span>
+                  <span className="text leading-relaxed text-black/80 dark:text-white/80 pt-1">
+                    {formatInstructions([instruction])}
+                  </span>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold mb-4 text-black dark:text-white">
+            Estimated Time
+          </h3>
+          <div className="flex space-x-8 text-base text-black/80 dark:text-white/80">
+            <p>
+              <strong className="font-semibold text-black dark:text-white">
+                Preparation:
+              </strong>{' '}
+              {recipe.prep_time_mins} minutes
+            </p>
+            <p>
+              <strong className="font-semibold text-black dark:text-white">
+                Cooking:
+              </strong>{' '}
+              {recipe.cook_time_mins} minutes
+            </p>
+          </div>
+        </div>
+        {recipe.created_by === user?.id && (
+          <div className="flex space-x-4 mt-4">
+            <RecipeDeleteButton id={recipe.id} />
+            <RecipeEditButton recipe={recipe} />
+          </div>
+        )}
+        {recipe.source_url && (
+          <div className="mt-6 p-4 bg-background-light/30 dark:bg-background-dark/30 rounded-lg border border-primary/10">
+            <p className="text-sm text-muted-foreground mb-2">
+              Original Recipe Source:
+            </p>
+            <a
+              href={recipe.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline break-all"
+            >
+              {recipe.source_url}
+            </a>
+          </div>
+        )}
       </div>
     </main>
   );
